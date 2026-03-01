@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, useSpring, useMotionTemplate, AnimatePresence } from 'framer-motion';
 import { useLanyard, getAvatarUrl, getDisplayName, getAssetUrl } from '@/hooks/useLanyard';
-import { Activity, Music, Gamepad2, Code, Zap, Globe, Smartphone, Monitor, Clock, History, ExternalLink, Cpu } from 'lucide-react';
+import { Activity, Music, Gamepad2, Code, Zap, Globe, Smartphone, Monitor, Clock, History, ExternalLink, Cpu, Terminal } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { Activity as DiscordActivity, SpotifyData } from '@/types/lanyard';
 
@@ -53,9 +53,9 @@ function ActivityCard({ activity, type }: { activity: any, type: 'spotify' | 'ga
     <motion.div 
       initial={{ scale: 0.9, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
-      className="relative group flex items-center gap-4 p-4 bg-white/[0.03] border border-white/10 rounded-2xl backdrop-blur-xl hover:bg-white/10 transition-all min-w-[280px] shadow-2xl overflow-hidden"
+      className="relative group flex items-center gap-4 p-4 bg-white/[0.05] border border-white/20 rounded-2xl backdrop-blur-2xl hover:bg-white/10 hover:border-white/40 transition-all min-w-[280px] shadow-2xl overflow-hidden"
     >
-      <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+      <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
       
       <div className="relative shrink-0">
         <div className="w-16 h-16 rounded-xl overflow-hidden shadow-2xl bg-neutral-900 border border-white/10">
@@ -82,7 +82,7 @@ function ActivityCard({ activity, type }: { activity: any, type: 'spotify' | 'ga
           {isSpotify ? <Music className="w-3 h-3 text-green-400" /> : 
            type === 'code' ? <Code className="w-3 h-3 text-blue-400" /> : 
            <Gamepad2 className="w-3 h-3 text-purple-400" />}
-          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 truncate">
+          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 truncate">
             {isSpotify ? 'Spotify' : activity.name}
           </span>
         </div>
@@ -113,7 +113,7 @@ function MusicHistory({ history }: { history: SpotifyData[] }) {
     <motion.div 
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
-      className="hidden 2xl:flex absolute right-12 top-1/2 -translate-y-1/2 flex-col gap-6 w-72"
+      className="hidden md:flex absolute right-12 top-1/2 -translate-y-1/2 flex-col gap-6 w-72 z-[60]"
     >
       <div className="flex items-center gap-3 text-white/20 px-2">
         <div className="h-[1px] flex-1 bg-white/10" />
@@ -146,6 +146,9 @@ function MusicHistory({ history }: { history: SpotifyData[] }) {
 // --- Main Hero ---
 
 export function Hero() {
+  // --- VERIFICATION LOG ---
+  console.log("%c [HERO V3] LOADED ", "background: #fff; color: #000; font-weight: bold;");
+
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -165,11 +168,10 @@ export function Hero() {
     }
   }, [data?.spotify]);
 
-  // Mouse/3D Logic
   const mouseX = useSpring(0, { stiffness: 300, damping: 50 });
   const mouseY = useSpring(0, { stiffness: 300, damping: 50 });
-  const rotateX = useTransform(mouseY, [-500, 500], [10, -10]);
-  const rotateY = useTransform(mouseX, [-500, 500], [-10, 10]);
+  const rotateX = useTransform(mouseY, [-500, 500], [15, -15]);
+  const rotateY = useTransform(mouseX, [-500, 500], [-15, 15]);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -180,11 +182,10 @@ export function Hero() {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  // Transforms - MUCH MORE DRAMATIC
-  const scale = useTransform(scrollYProgress, [0, 0.8], [1, 2.5]);
-  const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
-  const blur = useTransform(scrollYProgress, [0, 0.6], [0, 20]);
-  const contentY = useTransform(scrollYProgress, [0, 1], [0, -300]);
+  const scale = useTransform(scrollYProgress, [0, 0.8], [1, 3]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const blur = useTransform(scrollYProgress, [0, 0.5], [0, 30]);
+  const contentY = useTransform(scrollYProgress, [0, 1], [0, -500]);
 
   const status = data?.discord_status || 'offline';
   const activities = data?.activities || [];
@@ -192,25 +193,31 @@ export function Hero() {
   const otherActivities = activities.filter(a => a.id !== 'spotify:1' && a.name !== 'Spotify');
 
   return (
-    <div ref={containerRef} className="h-[300vh] relative">
+    <div ref={containerRef} className="h-[400vh] relative">
       <div className="sticky top-0 h-screen w-full overflow-hidden bg-black flex flex-col items-center justify-center">
         
+        {/* UNDENIABLE VERSION MARKER */}
+        <div className="absolute top-4 left-4 z-[100] flex items-center gap-2 px-3 py-1 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded-full opacity-50">
+          <Terminal className="w-3 h-3" />
+          Build_v3.0_Active
+        </div>
+
         {/* Scanline Overlay */}
-        <div className="absolute inset-0 pointer-events-none z-[100] opacity-[0.03]"
+        <div className="absolute inset-0 pointer-events-none z-[100] opacity-[0.05]"
           style={{ backgroundImage: 'linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06))', backgroundSize: '100% 2px, 3px 100%' }}
         />
 
         {/* Background Grid & Spotlight */}
         <div className="absolute inset-0 z-0">
           <div 
-            className="absolute inset-0 opacity-[0.1]"
+            className="absolute inset-0 opacity-[0.15]"
             style={{
-              backgroundImage: 'radial-gradient(#ffffff 0.5px, transparent 0.5px)',
-              backgroundSize: '30px 30px',
+              backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)',
+              backgroundSize: '40px 40px',
             }}
           />
           <motion.div
-            className="absolute w-[1000px] h-[1000px] bg-white/[0.02] rounded-full blur-[120px] pointer-events-none"
+            className="absolute w-[1200px] h-[1200px] bg-white/[0.05] rounded-full blur-[150px] pointer-events-none"
             style={{
               left: '50%', top: '50%',
               x: mouseX, y: mouseY,
@@ -223,12 +230,12 @@ export function Hero() {
         <motion.a
           href="https://github.com/fenruko"
           target="_blank"
-          style={{ x: useTransform(mouseX, [-500, 500], [20, -20]), y: useTransform(mouseY, [-500, 500], [20, -20]) }}
-          className="hidden lg:flex absolute left-12 top-12 z-50 items-center gap-3 p-2 bg-white/5 border border-white/10 rounded-full backdrop-blur-md hover:bg-white/10 transition-colors group"
+          style={{ x: useTransform(mouseX, [-500, 500], [30, -30]), y: useTransform(mouseY, [-500, 500], [30, -30]) }}
+          className="absolute left-12 top-24 z-50 flex items-center gap-3 p-3 bg-white/10 border border-white/20 rounded-full backdrop-blur-2xl hover:bg-white text-black transition-all group shadow-2xl"
         >
-          <img src="https://cdn.discordapp.com/avatars/1329184069426348052/6af3960600da4c720bf76d5346b9068b.png?size=1024" className="w-8 h-8 rounded-full border border-white/20 group-hover:rotate-12 transition-transform" alt="Rift" />
-          <span className="text-[10px] font-black uppercase tracking-widest pr-2 text-white/40 group-hover:text-white/80 transition-colors">Featured: Rift Bot</span>
-          <ExternalLink className="w-3 h-3 text-white/20 mr-2" />
+          <img src="https://cdn.discordapp.com/avatars/1329184069426348052/6af3960600da4c720bf76d5346b9068b.png?size=1024" className="w-10 h-10 rounded-full border-2 border-black group-hover:scale-110 transition-transform" alt="Rift" />
+          <span className="text-xs font-black uppercase tracking-widest pr-2">Rift Bot</span>
+          <ExternalLink className="w-4 h-4" />
         </motion.a>
 
         <MusicHistory history={musicHistory.slice(1)} /> 
@@ -247,12 +254,12 @@ export function Hero() {
           {/* Avatar Area */}
           <div className="relative">
             <motion.div 
-              animate={{ rotate: 360 }}
-              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-              className="absolute -inset-8 border border-dashed border-white/10 rounded-full opacity-50"
+              animate={{ rotate: 360, scale: [1, 1.1, 1] }}
+              transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+              className="absolute -inset-12 border-2 border-dashed border-white/20 rounded-full opacity-30"
             />
             
-            <div className="relative w-36 h-36 md:w-56 md:h-56 rounded-full overflow-hidden border-4 border-black ring-1 ring-white/20 shadow-[0_0_50px_rgba(255,255,255,0.05)]">
+            <div className="relative w-40 h-40 md:w-64 md:h-64 rounded-full overflow-hidden border-8 border-white ring-2 ring-black shadow-[0_0_100px_rgba(255,255,255,0.1)]">
               {data?.discord_user?.avatar ? (
                 <img 
                   src={getAvatarUrl(data.discord_user.id, data.discord_user.avatar, 512)} 
@@ -261,44 +268,35 @@ export function Hero() {
                 />
               ) : (
                 <div className="w-full h-full bg-neutral-900 flex items-center justify-center animate-pulse">
-                   <Cpu className="w-12 h-12 text-white/10" />
+                   <Cpu className="w-16 h-16 text-white/10" />
                 </div>
               )}
             </div>
 
-            {/* Platform Indicators */}
-            <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 flex gap-3 bg-white/10 backdrop-blur-xl px-4 py-2 rounded-full border border-white/10 shadow-2xl">
-              <div className={cn("w-2 h-2 rounded-full animate-pulse shadow-[0_0_10px_currentColor]", 
-                status === 'online' ? "text-green-500 bg-green-500" : 
-                status === 'dnd' ? "text-red-500 bg-red-500" :
-                status === 'idle' ? "text-yellow-500 bg-yellow-500" : "text-neutral-500 bg-neutral-500"
-              )} />
-              {data?.active_on_discord_mobile && <Smartphone className="w-3 h-3 text-white/60" />}
-              {data?.active_on_discord_desktop && <Monitor className="w-3 h-3 text-white/60" />}
+            <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 flex gap-4 bg-white text-black px-6 py-2 rounded-full border-4 border-black shadow-2xl font-black uppercase text-xs tracking-widest">
+              {status}
+              {data?.active_on_discord_mobile && <Smartphone className="w-4 h-4" />}
             </div>
           </div>
 
           {/* Typography */}
           <div className="space-y-4">
             <motion.h1 
-              initial={{ letterSpacing: "0.5em", opacity: 0 }}
-              animate={{ letterSpacing: "-0.05em", opacity: 1 }}
-              transition={{ duration: 1, ease: "circOut" }}
-              className="text-7xl md:text-[11rem] font-black tracking-tighter text-white leading-none mix-blend-difference"
+              className="text-7xl md:text-[13rem] font-black tracking-tighter text-white leading-none drop-shadow-[0_0_30px_rgba(255,255,255,0.2)]"
             >
               {data?.discord_user ? getDisplayName(data.discord_user).toUpperCase() : 'LOADING'}
             </motion.h1>
             <div className="flex items-center justify-center gap-4">
-              <div className="h-[1px] w-12 bg-white/20" />
-              <p className="text-sm md:text-base text-white/30 font-mono tracking-[0.5em] uppercase">
-                Creative Developer // 17Y
+              <div className="h-[2px] w-20 bg-white" />
+              <p className="text-base md:text-xl text-white font-black tracking-[0.6em] uppercase">
+                SYSTEM_OVERRIDE
               </p>
-              <div className="h-[1px] w-12 bg-white/20" />
+              <div className="h-[2px] w-20 bg-white" />
             </div>
           </div>
 
           {/* Activity Grid */}
-          <div className="flex flex-wrap items-center justify-center gap-6 mt-4 w-full px-8">
+          <div className="flex flex-wrap items-center justify-center gap-8 mt-4 w-full px-8">
             <AnimatePresence mode="popLayout">
               {spotify && <ActivityCard key="spotify" activity={spotify} type="spotify" />}
               {otherActivities.map((a) => (
@@ -310,17 +308,21 @@ export function Hero() {
         </motion.div>
 
         {/* Progress Bar */}
-        <div className="absolute left-12 bottom-12 h-32 w-[1px] bg-white/10">
+        <div className="absolute left-12 bottom-12 h-64 w-[4px] bg-white/10 rounded-full">
           <motion.div 
             style={{ scaleY: scrollYProgress, transformOrigin: "top" }}
-            className="w-full h-full bg-white/60"
+            className="w-full h-full bg-white rounded-full shadow-[0_0_15px_#fff]"
           />
         </div>
 
         {/* HUD Elements */}
-        <div className="absolute right-12 bottom-12 text-right hidden md:block">
-           <p className="text-[10px] font-mono text-white/20 uppercase tracking-[0.3em] mb-1">System_Status</p>
-           <p className="text-xs font-mono text-white/60">ACTIVE_SEQUENCE_LOADED</p>
+        <div className="absolute right-12 bottom-12 text-right">
+           <p className="text-xs font-black text-white uppercase tracking-[0.5em] mb-2">Build_Sequence: 003</p>
+           <div className="flex items-center justify-end gap-2">
+             <div className="w-12 h-2 bg-white" />
+             <div className="w-4 h-2 bg-white/30" />
+             <div className="w-4 h-2 bg-white/30" />
+           </div>
         </div>
       </div>
     </div>
