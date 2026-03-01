@@ -1,0 +1,168 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 3%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 3%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 0 0% 8%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 12%;
+    --muted-foreground: 0 0% 60%;
+    --accent: 0 0% 12%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 0 0% 100%;
+    --radius: 1rem;
+    
+    /* Discord Status Colors */
+    --status-online: 146 60% 37%;
+    --status-idle: 43 87% 57%;
+    --status-dnd: 359 82% 60%;
+    --status-offline: 228 6% 53%;
+    
+    /* Spotify */
+    --spotify: 140 80% 42%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply bg-black text-white antialiased;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+}
+
+@layer utilities {
+  .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+  
+  .text-gradient {
+    background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.6) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .glow-online {
+    box-shadow: 0 0 30px hsl(var(--status-online) / 0.4);
+  }
+  
+  .glow-idle {
+    box-shadow: 0 0 30px hsl(var(--status-idle) / 0.4);
+  }
+  
+  .glow-dnd {
+    box-shadow: 0 0 30px hsl(var(--status-dnd) / 0.4);
+  }
+  
+  .glow-offline {
+    box-shadow: 0 0 30px hsl(var(--status-offline) / 0.3);
+  }
+  
+  .card-glass {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+  }
+  
+  .card-glass:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* Status Ring Animation */
+@keyframes pulse-ring {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 20px 2px currentColor;
+  }
+  50% {
+    box-shadow: 0 0 30px 6px currentColor;
+  }
+}
+
+.status-ring {
+  animation: pulse-ring 2s ease-in-out infinite;
+}
+
+.status-ring-glow {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+/* Progress Bar Animation */
+@keyframes progress-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.progress-shimmer {
+  background: linear-gradient(
+    90deg,
+    #1DB954 0%,
+    #1ED760 50%,
+    #1DB954 100%
+  );
+  background-size: 200% 100%;
+  animation: progress-shimmer 3s linear infinite;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Selection */
+::selection {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
