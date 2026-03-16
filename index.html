@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>fenruko</title>
+<title>fenruko — developer</title>
 <link rel="icon" href="https://cdn.discordapp.com/embed/avatars/0.png" id="favicon">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -124,6 +124,9 @@ body::after{
 .spotify-card:hover{border-color:rgba(29,185,84,.25);}
 .spotify-inner{display:flex;gap:14px;align-items:center;}
 .spotify-art{width:64px;height:64px;border-radius:8px;object-fit:cover;flex-shrink:0;box-shadow:0 4px 20px rgba(0,0,0,.5);background:rgba(29,185,84,.08);border:1px solid rgba(29,185,84,.15);}
+.spotify-art-link{display:block;flex-shrink:0;border-radius:8px;transition:transform .2s,box-shadow .2s;}
+.spotify-art-link:hover{transform:scale(1.04);box-shadow:0 6px 28px rgba(29,185,84,.35);}
+.spotify-art-link:hover .spotify-art{border-color:rgba(29,185,84,.4);}
 .spotify-info{flex:1;min-width:0;}
 .spotify-song{font-size:.95rem;font-weight:700;color:#fff;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;}
 .spotify-song-link{text-decoration:none;color:#fff;transition:color .2s;}
@@ -145,29 +148,81 @@ body::after{
 
 /* ════ LYRICS ════ */
 .lyrics-panel{
-  margin-top:16px;padding:14px 18px 12px;
-  background:rgba(0,0,0,.28);
-  border-radius:12px;
-  border:1px solid rgba(29,185,84,.07);
+  margin-top:16px;
+  border-radius:14px;
+  border:1px solid rgba(29,185,84,.12);
+  background:linear-gradient(180deg,rgba(0,0,0,.5) 0%,rgba(0,0,0,.3) 100%);
   text-align:center;
-  display:none;
+  overflow:hidden;
+  max-height:0;
+  opacity:0;
+  padding:0 20px;
+  transition:max-height .55s cubic-bezier(.23,1,.32,1),
+             opacity .4s ease,
+             padding .45s cubic-bezier(.23,1,.32,1),
+             border-color .4s;
 }
-.lyrics-panel.visible{display:block;}
-.lyric-line{line-height:1.9;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.lyric-prev{font-size:.7rem;opacity:.16;color:var(--chalk2);margin-bottom:2px;}
-.lyric-curr{font-size:.875rem;font-weight:600;color:#fff;margin:4px 0;}
-.lyric-next{font-size:.7rem;opacity:.22;color:var(--chalk2);margin-top:2px;}
-.lyric-empty{height:1.4em;}
+.lyrics-panel.visible{
+  max-height:160px;
+  opacity:1;
+  padding:16px 20px 14px;
+  border-color:rgba(29,185,84,.18);
+}
+.lyric-display{position:relative;overflow:hidden;}
+.lyric-line{
+  line-height:1.95;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  transition:opacity .4s ease,transform .4s cubic-bezier(.23,1,.32,1),
+             font-size .35s cubic-bezier(.23,1,.32,1),filter .4s ease;
+}
+.lyric-prev{
+  font-size:.68rem;opacity:.15;color:var(--chalk2);
+  filter:blur(.6px);transform:translateY(-1px);
+  min-height:1.3em;
+}
+.lyric-curr{
+  font-size:.9rem;font-weight:600;opacity:1;color:#fff;
+  filter:none;transform:none;
+  margin:3px 0;
+}
+.lyric-next{
+  font-size:.68rem;opacity:.2;color:var(--chalk2);
+  filter:blur(.6px);transform:translateY(1px);
+  min-height:1.3em;
+}
+/* line-enter animation when current line changes */
+@keyframes lyric-in{
+  from{opacity:0;transform:translateY(10px);}
+  to{opacity:1;transform:translateY(0);}
+}
+.lyric-curr.animating{animation:lyric-in .35s cubic-bezier(.23,1,.32,1) forwards;}
+/* per-word */
 .lyric-word{
   display:inline;
-  color:rgba(226,226,237,.18);
-  transition:color .15s ease,text-shadow .15s ease;
+  color:rgba(255,255,255,.2);
+  transition:color .3s ease,text-shadow .3s ease,opacity .3s ease;
+  will-change:color,text-shadow;
 }
 .lyric-word.lit{
-  color:var(--spotify);
-  text-shadow:0 0 16px rgba(29,185,84,.4);
+  color:#1db954;
+  text-shadow:
+    0 0 8px rgba(29,185,84,.9),
+    0 0 20px rgba(29,185,84,.55),
+    0 0 45px rgba(29,185,84,.25),
+    0 0 80px rgba(29,185,84,.1);
 }
-.lyrics-no-sync{font-size:.7rem;color:var(--chalk3);opacity:.4;font-style:italic;padding:2px 0;}
+/* subtle entrance stagger per word — delay set via inline style */
+.lyric-word.entering{
+  animation:word-pop .25s cubic-bezier(.34,1.56,.64,1) forwards;
+}
+@keyframes word-pop{
+  from{transform:scale(.85);opacity:.3;}
+  to{transform:scale(1);opacity:1;}
+}
+.lyrics-no-sync{
+  font-size:.7rem;color:var(--chalk3);opacity:.5;font-style:italic;padding:4px 0;
+  animation:lyric-in .4s ease forwards;
+}
 
 /* ════ ACTIVITIES ════ */
 .activities-list{display:flex;flex-direction:column;gap:10px;}
@@ -451,9 +506,10 @@ const LANYARD_ID='834869554798395392';
 let spStart=0,spEnd=0,spInterval=null;
 
 /* ════ LYRICS ENGINE ════ */
-let lyrLines=null;      // [{time:sec, text:str}]
-let lyrKey=null;        // "artist||title" — skip re-fetch for same track
+let lyrLines=null;
+let lyrKey=null;
 let lyrRaf=null;
+let lyrDom={prevEl:null,currEl:null,nextEl:null,wordSpans:[],lineIdx:-1,litCount:-1};
 
 function parseLRC(raw){
   if(!raw)return null;
@@ -463,33 +519,44 @@ function parseLRC(raw){
     if(!m)continue;
     const t=parseInt(m[1])*60+parseFloat(m[2].replace(',','.'));
     const txt=m[3].trim();
-    out.push({time:t,text:txt});
+    if(txt||out.length)out.push({time:t,text:txt});
   }
   return out.length?out:null;
 }
 
 function hideLyrics(){
   const p=document.getElementById('lyrics-panel');
-  if(p){p.classList.remove('visible');p.innerHTML='';}
+  if(p)p.classList.remove('visible');
   if(lyrRaf){cancelAnimationFrame(lyrRaf);lyrRaf=null;}
-  _lastLyrHtml='__init__';
+  lyrDom={prevEl:null,currEl:null,nextEl:null,wordSpans:[],lineIdx:-1,litCount:-1};
+}
+
+function buildLyricsDom(){
+  const panel=document.getElementById('lyrics-panel');
+  if(!panel)return;
+  panel.innerHTML='<div class="lyric-display"><div class="lyric-line lyric-prev" id="lyr-prev"></div><div class="lyric-line lyric-curr" id="lyr-curr"></div><div class="lyric-line lyric-next" id="lyr-next"></div></div>';
+  lyrDom.prevEl=document.getElementById('lyr-prev');
+  lyrDom.currEl=document.getElementById('lyr-curr');
+  lyrDom.nextEl=document.getElementById('lyr-next');
+  lyrDom.wordSpans=[];
+  lyrDom.lineIdx=-1;
+  lyrDom.litCount=-1;
+  panel.classList.add('visible');
 }
 
 async function fetchLyrics(artist,title,album,durMs){
   const key=`${artist}||${title}`;
   if(lyrKey===key)return;
-  lyrKey=key;lyrLines=null;_lastLyrHtml='__init__';
+  lyrKey=key;lyrLines=null;
   if(lyrRaf){cancelAnimationFrame(lyrRaf);lyrRaf=null;}
   const panel=document.getElementById('lyrics-panel');
   if(panel){panel.innerHTML='<div class="lyrics-no-sync">searching for lyrics…</div>';panel.classList.add('visible');}
   try{
     const ca=artist.split(';')[0].split(',')[0].trim();
     const dur=Math.round(durMs/1000);
-    // 1) exact match with duration
     let synced=null,hasPlain=false;
     const r1=await fetch(`https://lrclib.net/api/get?artist_name=${encodeURIComponent(ca)}&track_name=${encodeURIComponent(title)}&album_name=${encodeURIComponent(album)}&duration=${dur}`);
     if(r1.ok){const j1=await r1.json();if(j1.syncedLyrics)synced=j1.syncedLyrics;else if(j1.plainLyrics)hasPlain=true;}
-    // 2) search fallback (no duration needed)
     if(!synced){
       const r2=await fetch(`https://lrclib.net/api/search?artist_name=${encodeURIComponent(ca)}&track_name=${encodeURIComponent(title)}`);
       if(r2.ok){
@@ -499,55 +566,65 @@ async function fetchLyrics(artist,title,album,durMs){
       }
     }
     if(!synced){
-      if(panel){panel.innerHTML=`<div class="lyrics-no-sync">${hasPlain?'lyrics found but not time-synced':'no lyrics found'}</div>`;panel.classList.add('visible');}
+      if(panel){panel.innerHTML=`<div class="lyrics-no-sync">${hasPlain?'lyrics found but not time-synced':'no lyrics found for this track'}</div>`;panel.classList.add('visible');}
       return;
     }
     lyrLines=parseLRC(synced);
-    if(lyrLines){(function frame(){renderLyrics();lyrRaf=requestAnimationFrame(frame);})();}
+    if(lyrLines){buildLyricsDom();(function frame(){renderLyrics();lyrRaf=requestAnimationFrame(frame);})();}
   }catch(e){
     console.warn('Lyrics fetch failed',e);
-    if(panel)panel.innerHTML='<div class="lyrics-no-sync">could not load lyrics</div>';
+    const p2=document.getElementById('lyrics-panel');
+    if(p2)p2.innerHTML='<div class="lyrics-no-sync">could not load lyrics</div>';
   }
 }
 
-/* track last rendered state to avoid unnecessary DOM mutations */
-let _lastLyrHtml='__init__';
-
 function renderLyrics(){
-  if(!lyrLines)return;
-  const panel=document.getElementById('lyrics-panel');if(!panel)return;
+  if(!lyrLines||!lyrDom.currEl)return;
   const elapsed=(Date.now()-spStart)/1000;
 
   // find current line
   let ci=0;
   for(let i=0;i<lyrLines.length;i++){if(lyrLines[i].time<=elapsed)ci=i;else break;}
 
-  const prev=ci>0?lyrLines[ci-1]:null;
+  // ── Line changed: rebuild word spans ──
+  if(ci!==lyrDom.lineIdx){
+    lyrDom.lineIdx=ci;lyrDom.litCount=-1;
+    const prev=ci>0?lyrLines[ci-1]:null;
+    const curr=lyrLines[ci];
+    const next=ci<lyrLines.length-1?lyrLines[ci+1]:null;
+    if(lyrDom.prevEl)lyrDom.prevEl.textContent=prev?prev.text:'';
+    if(lyrDom.nextEl)lyrDom.nextEl.textContent=next?next.text:'';
+    // rebuild word spans for current line
+    lyrDom.currEl.innerHTML='';
+    const words=(curr.text||'').split(/\s+/).filter(Boolean);
+    lyrDom.wordSpans=[];
+    words.forEach((w,i)=>{
+      if(i>0)lyrDom.currEl.appendChild(document.createTextNode(' '));
+      const sp=document.createElement('span');
+      sp.className='lyric-word';
+      sp.textContent=w;
+      lyrDom.currEl.appendChild(sp);
+      lyrDom.wordSpans.push(sp);
+    });
+    // trigger entrance animation
+    lyrDom.currEl.classList.remove('animating');
+    void lyrDom.currEl.offsetWidth;
+    lyrDom.currEl.classList.add('animating');
+  }
+
+  // ── Per-word highlight ──
   const curr=lyrLines[ci];
   const next=ci<lyrLines.length-1?lyrLines[ci+1]:null;
-
-  // per-word progress within current line
   const lStart=curr.time;
-  const lEnd=next?next.time:lStart+6;
-  const lDur=Math.max(lEnd-lStart,0.5);
+  const lEnd=next?next.time:lStart+5;
+  const lDur=Math.max(lEnd-lStart,0.3);
   const lProg=Math.min(1,Math.max(0,(elapsed-lStart)/lDur));
-
-  const words=(curr.text||'').split(/\s+/).filter(Boolean);
-  // instrument each word with a fractional threshold
-  const wHtml=words.map((w,i)=>{
-    const threshold=words.length>1?(i/(words.length-1)):0;
-    const lit=lProg>=threshold;
-    return`<span class="lyric-word${lit?' lit':''}">${esc(w)}</span>`;
-  }).join(' ');
-
-  const html=(prev?`<div class="lyric-line lyric-prev">${esc(prev.text)}</div>`:'<div class="lyric-empty"></div>')
-    +`<div class="lyric-line lyric-curr">${wHtml}</div>`
-    +(next?`<div class="lyric-line lyric-next">${esc(next.text)}</div>`:'<div class="lyric-empty"></div>');
-
-  if(html!==_lastLyrHtml){
-    panel.innerHTML=html;
-    panel.classList.add('visible');
-    _lastLyrHtml=html;
+  const spans=lyrDom.wordSpans;
+  if(!spans.length)return;
+  const litCount=Math.min(Math.floor(lProg*(spans.length+1)),spans.length);
+  if(litCount!==lyrDom.litCount){
+    lyrDom.litCount=litCount;
+    spans.forEach((sp,i)=>sp.classList.toggle('lit',i<litCount));
   }
 }
 
@@ -567,11 +644,14 @@ function renderSpotify(sp){
   spEnd=sp.timestamps?.end||Date.now()+200000;
   const dur=spEnd-spStart;
 
+  const trackUrl=sp.track_id?`https://open.spotify.com/track/${sp.track_id}`:'#';
   content.innerHTML=`
     <div class="spotify-inner">
-      <img class="spotify-art" src="${sp.album_art_url||''}" alt="" onerror="this.style.display='none'">
+      <a href="${trackUrl}" target="_blank" rel="noopener" class="spotify-art-link">
+        <img class="spotify-art" src="${sp.album_art_url||''}" alt="${esc(sp.song)}" onerror="this.style.display='none'">
+      </a>
       <div class="spotify-info">
-        <a class="spotify-song spotify-song-link" href="https://open.spotify.com/track/${sp.track_id||''}" target="_blank" rel="noopener">${esc(sp.song)}</a>
+        <a class="spotify-song spotify-song-link" href="${trackUrl}" target="_blank" rel="noopener">${esc(sp.song)}</a>
         <div class="spotify-artist">${esc(sp.artist.replace(/;/g,', '))}</div>
         <div class="spotify-album">${esc(sp.album)}</div>
         <div class="spotify-progress"><div class="spotify-bar" id="sp-bar"></div></div>
@@ -695,7 +775,7 @@ setTimeout(typeNext,600);
 const termInput=document.getElementById('terminal-input');
 const cmds={
   help:()=>`<span class="t-green">commands:</span> whoami, projects, stack, discord, rift, clear, age, joke`,
-  whoami:()=>`fenruko — 16yo discord bot dev!`,
+  whoami:()=>`fenruko — 16yo discord bot dev from egypt 🇪🇬`,
   age:()=>`<span class="t-yellow">16</span> years old`,
   discord:()=>`<a href="https://discord.com/users/834869554798395392" class="t-blue" target="_blank">discord.com/users/834869554798395392</a>`,
   rift:()=>`<span class="t-purple">rift.baby</span> — discord bot: music, mod, economy &amp; more.`,
