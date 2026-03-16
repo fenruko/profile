@@ -4,18 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>fenruko — developer</title>
-<link rel="icon" href="https://cdn.discordapp.com/avatars/991663665373327420/a_52296c00d5a49141075727195822365a.gif">
+<link rel="icon" href="https://cdn.discordapp.com/embed/avatars/0.png" id="favicon">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Geist+Mono:wght@300;400;500;600&family=Geist:wght@300;400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Geist+Mono:wght@300;400;500;600&family=Geist:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 /* ══════════════════════════
    ROOT & RESET
 ══════════════════════════ */
 :root{
   --bg:        #070709;
-  --bg2:       #0d0d12;
-  --bg3:       #111118;
   --chalk:     #e2e2ed;
   --chalk2:    rgba(226,226,237,.55);
   --chalk3:    rgba(226,226,237,.22);
@@ -23,16 +21,13 @@
   --border2:   rgba(255,255,255,.1);
   --purple:    #7c5af4;
   --purple2:   #a78bfa;
-  --violet:    #6d28d9;
   --green:     #22c55e;
   --yellow:    #eab308;
   --red:       #ef4444;
   --blue:      #3b82f6;
   --spotify:   #1db954;
-
-  --glass-bg:   linear-gradient(135deg,rgba(255,255,255,.04),rgba(255,255,255,.015));
-  --glass-s:    inset 0 1px 1px rgba(255,255,255,.07),0 4px 24px rgba(0,0,0,.6),inset 0 -1px 1px rgba(0,0,0,.3);
-  --radius:     16px;
+  --glass-s:   inset 0 1px 1px rgba(255,255,255,.07),0 4px 24px rgba(0,0,0,.6),inset 0 -1px 1px rgba(0,0,0,.3);
+  --radius:    16px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
@@ -44,21 +39,13 @@ body{
   -webkit-font-smoothing:antialiased;
   min-height:100vh;
 }
-
-/* grain overlay */
 body::after{
   content:'';position:fixed;inset:0;pointer-events:none;z-index:9998;opacity:.025;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
 }
-
-/* ══════════════════════════
-   STARS CANVAS
-══════════════════════════ */
 #stars{position:fixed;inset:0;z-index:0;pointer-events:none;}
 
-/* ══════════════════════════
-   GLASS BUTTON (from Rift)
-══════════════════════════ */
+/* ════ GLASS BUTTON ════ */
 .glass-btn{
   position:relative;display:inline-flex;align-items:center;justify-content:center;gap:8px;
   padding:9px 20px;border-radius:12px;font-family:'Geist',sans-serif;font-size:.84rem;font-weight:500;
@@ -69,181 +56,84 @@ body::after{
   transition:color .25s,border-color .25s,transform .2s,box-shadow .25s;
   overflow:hidden;-webkit-font-smoothing:antialiased;letter-spacing:-.01em;
 }
-.glass-btn::before{content:'';position:absolute;inset:0;border-radius:inherit;
-  background:linear-gradient(to bottom,rgba(255,255,255,.04),transparent);
-  opacity:0;transition:opacity .3s;z-index:0;pointer-events:none;}
-.glass-btn::after{content:'';position:absolute;inset:0;border-radius:inherit;
-  background:linear-gradient(to top,rgba(0,0,0,.3),transparent);z-index:-1;pointer-events:none;}
+.glass-btn::before{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(to bottom,rgba(255,255,255,.04),transparent);opacity:0;transition:opacity .3s;z-index:0;pointer-events:none;}
+.glass-btn::after{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(to top,rgba(0,0,0,.3),transparent);z-index:-1;pointer-events:none;}
 .glass-btn>.bi,.glass-btn>svg{position:relative;z-index:1;}
 .glass-btn:hover{color:var(--chalk);border-color:var(--border2);box-shadow:var(--glass-s),0 0 20px rgba(124,90,244,.12);}
 .glass-btn:hover::before{opacity:1;}
-.glass-btn-primary{
-  background:rgba(124,90,244,.15);color:var(--purple2);
-  border-color:rgba(124,90,244,.35);
-  box-shadow:inset 0 1px 1px rgba(167,139,250,.15),0 4px 24px rgba(0,0,0,.6),0 0 0 1px rgba(124,90,244,.1);
-}
+.glass-btn-primary{background:rgba(124,90,244,.15);color:var(--purple2);border-color:rgba(124,90,244,.35);box-shadow:inset 0 1px 1px rgba(167,139,250,.15),0 4px 24px rgba(0,0,0,.6),0 0 0 1px rgba(124,90,244,.1);}
 .glass-btn-primary:hover{background:rgba(124,90,244,.22);color:#c4b5fd;border-color:rgba(124,90,244,.5);box-shadow:inset 0 1px 1px rgba(167,139,250,.2),0 4px 24px rgba(0,0,0,.6),0 0 30px rgba(124,90,244,.25);}
 .glass-btn-sm{padding:6px 14px;font-size:.75rem;border-radius:9px;}
 .bi{display:flex;align-items:center;gap:7px;position:relative;z-index:1;}
 
-/* ══════════════════════════
-   LAYOUT
-══════════════════════════ */
-.wrap{
-  position:relative;z-index:1;
-  max-width:900px;margin:0 auto;
-  padding:0 20px 80px;
-}
+/* ════ LAYOUT ════ */
+.wrap{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:0 20px 80px;}
 
-/* ══════════════════════════
-   HERO — AVATAR ZONE
-══════════════════════════ */
-.hero{
-  padding:80px 0 40px;
-  display:flex;flex-direction:column;align-items:center;
-  text-align:center;gap:0;
-}
-
-/* spinning border avatar */
-.avatar-wrap{
-  position:relative;display:inline-flex;margin-bottom:24px;
-}
+/* ════ HERO ════ */
+.hero{padding:80px 0 40px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:0;}
+.avatar-wrap{position:relative;display:inline-flex;margin-bottom:24px;}
 .avatar-spin-ring{
   position:absolute;inset:-5px;border-radius:50%;
   background:conic-gradient(from 0deg,rgba(124,90,244,0) 0deg,rgba(124,90,244,.9) 90deg,rgba(167,139,250,.4) 180deg,rgba(124,90,244,0) 360deg);
-  animation:spin 4s linear infinite;z-index:0;
-  filter:blur(1px);
+  animation:spin 4s linear infinite;z-index:0;filter:blur(1px);
 }
 .avatar-spin-ring2{
-  position:absolute;inset:-3px;border-radius:50%;
-  background:var(--bg);z-index:1;
+  position:absolute;inset:-3px;border-radius:50%;background:var(--bg);z-index:1;
   mask:radial-gradient(farthest-side,transparent calc(100% - 4px),black calc(100% - 4px));
   -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 4px),black calc(100% - 4px));
 }
-.avatar-img{
-  width:110px;height:110px;border-radius:50%;object-fit:cover;
-  position:relative;z-index:2;display:block;
-}
-.status-dot{
-  position:absolute;bottom:6px;right:6px;z-index:3;
-  width:20px;height:20px;border-radius:50%;border:3px solid var(--bg);
-  background:#454950;transition:background .5s;
-}
+.avatar-img{width:110px;height:110px;border-radius:50%;object-fit:cover;position:relative;z-index:2;display:block;}
+.status-dot{position:absolute;bottom:6px;right:6px;z-index:3;width:20px;height:20px;border-radius:50%;border:3px solid var(--bg);background:#454950;transition:background .5s;}
 .status-dot.online{background:var(--green);}
 .status-dot.idle{background:var(--yellow);}
 .status-dot.dnd{background:var(--red);}
-.status-dot.offline{background:#454950;}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-.hero-name{
-  font-family:'Permanent Marker',cursive;
-  font-size:clamp(2.4rem,7vw,4rem);
-  color:#fff;letter-spacing:.04em;
-  margin-bottom:6px;
-  text-shadow:0 0 60px rgba(124,90,244,.4),0 2px 4px rgba(0,0,0,.5);
-}
-.hero-handle{
-  font-size:.82rem;font-weight:500;color:var(--chalk3);
-  letter-spacing:.08em;margin-bottom:14px;
-}
-.hero-status-text{
-  font-size:.82rem;color:var(--chalk2);margin-bottom:20px;min-height:1.2em;
-  display:flex;align-items:center;gap:6px;justify-content:center;
-}
+.hero-name{font-family:'Permanent Marker',cursive;font-size:clamp(2.4rem,7vw,4rem);color:#fff;letter-spacing:.04em;margin-bottom:6px;text-shadow:0 0 60px rgba(124,90,244,.4),0 2px 4px rgba(0,0,0,.5);}
+.hero-handle{font-size:.82rem;font-weight:500;color:var(--chalk3);letter-spacing:.08em;margin-bottom:14px;}
+.hero-status-text{font-size:.82rem;color:var(--chalk2);margin-bottom:20px;min-height:1.2em;display:flex;align-items:center;gap:6px;justify-content:center;}
 .hero-status-text .emoji{font-size:1rem;}
-.hero-chips{
-  display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-bottom:28px;
-}
-.chip{
-  display:inline-flex;align-items:center;gap:5px;
-  font-size:.7rem;font-weight:600;letter-spacing:.04em;padding:4px 12px;border-radius:99px;
-  background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--chalk2);
-}
+.hero-chips{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-bottom:28px;}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:.7rem;font-weight:600;letter-spacing:.04em;padding:4px 12px;border-radius:99px;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--chalk2);}
 .chip.purple{background:rgba(124,90,244,.1);border-color:rgba(124,90,244,.25);color:var(--purple2);}
 .chip.green{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.2);color:#4ade80;}
 .chip.blue{background:rgba(59,130,246,.08);border-color:rgba(59,130,246,.2);color:#93c5fd;}
 .hero-btns{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
 
-/* ══════════════════════════
-   GRID LAYOUT
-══════════════════════════ */
-.grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-  margin-top:32px;
-}
+/* ════ GRID ════ */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:32px;}
 @media(max-width:600px){.grid{grid-template-columns:1fr;}}
 .span-2{grid-column:1/-1;}
 
-/* ══════════════════════════
-   GLASS CARD
-══════════════════════════ */
+/* ════ CARD ════ */
 .card{
   position:relative;
   background:linear-gradient(145deg,rgba(255,255,255,.038),rgba(255,255,255,.012));
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:22px;overflow:hidden;
+  border:1px solid var(--border);border-radius:var(--radius);padding:22px;overflow:hidden;
   box-shadow:inset 0 1px 1px rgba(255,255,255,.05),0 4px 24px rgba(0,0,0,.55),inset 0 -1px 1px rgba(0,0,0,.3);
   transition:border-color .3s,transform .35s cubic-bezier(.23,1,.32,1),box-shadow .3s;
 }
-.card::before{
-  content:'';position:absolute;inset:0;border-radius:inherit;
-  background:linear-gradient(to bottom,rgba(255,255,255,.025),transparent 40%);
-  opacity:0;transition:opacity .4s;pointer-events:none;z-index:0;
-}
-.card:hover{
-  transform:translateY(-2px);
-  border-color:rgba(255,255,255,.09);
-  box-shadow:inset 0 1px 1px rgba(255,255,255,.06),0 8px 40px rgba(0,0,0,.6),inset 0 -1px 1px rgba(0,0,0,.3);
-}
+.card::before{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(to bottom,rgba(255,255,255,.025),transparent 40%);opacity:0;transition:opacity .4s;pointer-events:none;z-index:0;}
+.card:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.09);box-shadow:inset 0 1px 1px rgba(255,255,255,.06),0 8px 40px rgba(0,0,0,.6),inset 0 -1px 1px rgba(0,0,0,.3);}
 .card:hover::before{opacity:1;}
 .card>*{position:relative;z-index:1;}
-
-.card-label{
-  font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--chalk3);margin-bottom:14px;display:flex;align-items:center;gap:8px;
-}
+.card-label{font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--chalk3);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
 .card-label::before{content:'';width:14px;height:1px;background:var(--chalk3);}
 
-/* ══════════════════════════
-   SPOTIFY CARD
-══════════════════════════ */
-.spotify-card{
-  background:linear-gradient(145deg,rgba(29,185,84,.06),rgba(0,0,0,.02));
-  border-color:rgba(29,185,84,.15);
-}
+/* ════ SPOTIFY ════ */
+.spotify-card{background:linear-gradient(145deg,rgba(29,185,84,.06),rgba(0,0,0,.02));border-color:rgba(29,185,84,.15);}
 .spotify-card:hover{border-color:rgba(29,185,84,.25);}
 .spotify-inner{display:flex;gap:14px;align-items:center;}
-.spotify-art{
-  width:64px;height:64px;border-radius:8px;object-fit:cover;flex-shrink:0;
-  box-shadow:0 4px 20px rgba(0,0,0,.5);
-  background:rgba(29,185,84,.08);
-  border:1px solid rgba(29,185,84,.15);
-}
-.spotify-art-placeholder{
-  width:64px;height:64px;border-radius:8px;flex-shrink:0;
-  background:rgba(29,185,84,.06);border:1px solid rgba(29,185,84,.12);
-  display:flex;align-items:center;justify-content:center;font-size:1.5rem;
-}
+.spotify-art{width:64px;height:64px;border-radius:8px;object-fit:cover;flex-shrink:0;box-shadow:0 4px 20px rgba(0,0,0,.5);background:rgba(29,185,84,.08);border:1px solid rgba(29,185,84,.15);}
 .spotify-info{flex:1;min-width:0;}
 .spotify-song{font-size:.95rem;font-weight:700;color:#fff;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .spotify-artist{font-size:.78rem;color:rgba(29,185,84,.8);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .spotify-album{font-size:.72rem;color:var(--chalk3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.spotify-progress{
-  margin-top:10px;
-  height:3px;border-radius:99px;
-  background:rgba(255,255,255,.08);overflow:hidden;
-}
+.spotify-progress{margin-top:10px;height:3px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden;}
 .spotify-bar{height:100%;border-radius:99px;background:var(--spotify);width:0%;transition:width 1s linear;}
 .spotify-times{display:flex;justify-content:space-between;font-size:.65rem;color:var(--chalk3);margin-top:4px;}
 .spotify-label{color:var(--spotify);font-weight:700;display:flex;align-items:center;gap:5px;}
 .spotify-eq{display:flex;align-items:flex-end;gap:2px;height:12px;}
-.spotify-eq span{
-  width:3px;border-radius:2px;background:var(--spotify);
-  animation:eq 1s ease-in-out infinite alternate;
-}
+.spotify-eq span{width:3px;border-radius:2px;background:var(--spotify);animation:eq 1s ease-in-out infinite alternate;}
 .spotify-eq span:nth-child(1){animation-delay:0s;height:6px;}
 .spotify-eq span:nth-child(2){animation-delay:.15s;height:12px;}
 .spotify-eq span:nth-child(3){animation-delay:.3s;height:8px;}
@@ -251,26 +141,38 @@ body::after{
 @keyframes eq{to{height:3px;opacity:.5}}
 .not-playing{color:var(--chalk3);font-size:.82rem;display:flex;align-items:center;gap:8px;}
 
-/* ══════════════════════════
-   ACTIVITIES
-══════════════════════════ */
+/* ════ LYRICS ════ */
+.lyrics-panel{
+  margin-top:16px;padding:14px 18px 12px;
+  background:rgba(0,0,0,.28);
+  border-radius:12px;
+  border:1px solid rgba(29,185,84,.07);
+  text-align:center;
+  display:none;
+}
+.lyrics-panel.visible{display:block;}
+.lyric-line{line-height:1.9;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.lyric-prev{font-size:.7rem;opacity:.16;color:var(--chalk2);margin-bottom:2px;}
+.lyric-curr{font-size:.875rem;font-weight:600;color:#fff;margin:4px 0;}
+.lyric-next{font-size:.7rem;opacity:.22;color:var(--chalk2);margin-top:2px;}
+.lyric-empty{height:1.4em;}
+.lyric-word{
+  display:inline;
+  color:rgba(226,226,237,.18);
+  transition:color .15s ease,text-shadow .15s ease;
+}
+.lyric-word.lit{
+  color:var(--spotify);
+  text-shadow:0 0 16px rgba(29,185,84,.4);
+}
+.lyrics-no-sync{font-size:.7rem;color:var(--chalk3);opacity:.4;font-style:italic;padding:2px 0;}
+
+/* ════ ACTIVITIES ════ */
 .activities-list{display:flex;flex-direction:column;gap:10px;}
-.activity-item{
-  display:flex;align-items:center;gap:12px;
-  background:rgba(255,255,255,.025);border:1px solid var(--border);
-  border-radius:12px;padding:12px;
-  transition:border-color .3s,background .3s;
-}
+.activity-item{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:12px;padding:12px;transition:border-color .3s,background .3s;}
 .activity-item:hover{border-color:var(--border2);background:rgba(255,255,255,.04);}
-.activity-icon{
-  width:48px;height:48px;border-radius:10px;object-fit:cover;flex-shrink:0;
-  background:rgba(255,255,255,.04);border:1px solid var(--border);
-}
-.activity-icon-placeholder{
-  width:48px;height:48px;border-radius:10px;flex-shrink:0;
-  background:rgba(124,90,244,.08);border:1px solid rgba(124,90,244,.15);
-  display:flex;align-items:center;justify-content:center;font-size:1.2rem;
-}
+.activity-icon{width:48px;height:48px;border-radius:10px;object-fit:cover;flex-shrink:0;background:rgba(255,255,255,.04);border:1px solid var(--border);}
+.activity-icon-placeholder{width:48px;height:48px;border-radius:10px;flex-shrink:0;background:rgba(124,90,244,.08);border:1px solid rgba(124,90,244,.15);display:flex;align-items:center;justify-content:center;font-size:1.2rem;}
 .activity-info{flex:1;min-width:0;}
 .activity-type{font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--chalk3);margin-bottom:1px;}
 .activity-name{font-size:.88rem;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -279,181 +181,76 @@ body::after{
 .activity-elapsed{font-size:.65rem;color:var(--chalk3);flex-shrink:0;font-family:'Geist Mono',monospace;margin-top:1px;}
 .no-activity{color:var(--chalk3);font-size:.82rem;display:flex;align-items:center;gap:8px;padding:8px 0;}
 
-/* ══════════════════════════
-   ABOUT CARD
-══════════════════════════ */
+/* ════ ABOUT ════ */
 .about-text{font-size:.85rem;color:var(--chalk2);line-height:1.78;}
 .about-text strong{color:var(--chalk);}
 .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px;}
-.about-stat{
-  background:rgba(255,255,255,.025);border:1px solid var(--border);
-  border-radius:10px;padding:10px 14px;
-}
+.about-stat{background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:10px;padding:10px 14px;}
 .about-stat-n{font-size:1.1rem;font-weight:800;color:#fff;line-height:1;}
 .about-stat-l{font-size:.63rem;color:var(--chalk3);font-weight:500;letter-spacing:.06em;text-transform:uppercase;margin-top:2px;}
 
-/* ══════════════════════════
-   RIFT PROJECT CARD
-══════════════════════════ */
-.project-card{
-  background:linear-gradient(145deg,rgba(124,90,244,.07),rgba(0,0,0,.02));
-  border-color:rgba(124,90,244,.18);
-}
+/* ════ RIFT CARD ════ */
+.project-card{background:linear-gradient(145deg,rgba(124,90,244,.07),rgba(0,0,0,.02));border-color:rgba(124,90,244,.18);}
 .project-card:hover{border-color:rgba(124,90,244,.3);box-shadow:inset 0 1px 1px rgba(167,139,250,.07),0 8px 40px rgba(0,0,0,.6),0 0 40px rgba(124,90,244,.08);}
 .project-inner{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
-.project-icon{
-  width:52px;height:52px;border-radius:12px;object-fit:cover;flex-shrink:0;
-  border:1px solid rgba(124,90,244,.2);
-  box-shadow:0 0 20px rgba(124,90,244,.2);
-}
+.project-icon{width:52px;height:52px;border-radius:12px;object-fit:cover;flex-shrink:0;border:1px solid rgba(124,90,244,.2);box-shadow:0 0 20px rgba(124,90,244,.2);}
 .project-name{font-family:'Permanent Marker',cursive;font-size:1.5rem;color:#fff;letter-spacing:.06em;}
 .project-tag{font-size:.65rem;font-weight:700;letter-spacing:.06em;color:var(--purple2);text-transform:uppercase;}
 .project-desc{font-size:.82rem;color:var(--chalk2);line-height:1.7;margin-bottom:14px;}
 .project-tags{display:flex;flex-wrap:wrap;gap:5px;}
-.project-tag-badge{
-  font-size:.62rem;font-weight:600;letter-spacing:.04em;padding:2px 9px;border-radius:99px;
-  background:rgba(124,90,244,.1);color:var(--purple2);border:1px solid rgba(124,90,244,.2);
-}
-.project-glow{
-  position:absolute;top:-30px;right:-30px;width:180px;height:180px;border-radius:50%;
-  background:radial-gradient(ellipse,rgba(124,90,244,.12),transparent 65%);
-  pointer-events:none;
-}
+.project-tag-badge{font-size:.62rem;font-weight:600;letter-spacing:.04em;padding:2px 9px;border-radius:99px;background:rgba(124,90,244,.1);color:var(--purple2);border:1px solid rgba(124,90,244,.2);}
+.project-glow{position:absolute;top:-30px;right:-30px;width:180px;height:180px;border-radius:50%;background:radial-gradient(ellipse,rgba(124,90,244,.12),transparent 65%);pointer-events:none;}
 
-/* ══════════════════════════
-   LINKS CARD
-══════════════════════════ */
-.links-list{display:flex;flex-direction:column;gap:8px;}
-.link-item{
-  display:flex;align-items:center;gap:10px;
-  background:rgba(255,255,255,.025);border:1px solid var(--border);
-  border-radius:10px;padding:10px 14px;text-decoration:none;
-  color:var(--chalk2);font-size:.82rem;font-weight:500;
-  transition:border-color .25s,background .25s,color .25s;
-}
-.link-item:hover{border-color:var(--border2);background:rgba(255,255,255,.045);color:var(--chalk);}
-.link-icon{width:22px;height:22px;border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
-.link-label{flex:1;}
-.link-arrow{opacity:.3;font-size:.7rem;transition:opacity .2s,transform .2s;}
-.link-item:hover .link-arrow{opacity:.7;transform:translateX(2px);}
-
-/* ══════════════════════════
-   TERMINAL
-══════════════════════════ */
-.terminal-card{
-  background:linear-gradient(145deg,rgba(0,0,0,.6),rgba(0,0,0,.4));
-  border-color:rgba(255,255,255,.07);
-  font-family:'Geist Mono',monospace;
-}
-.terminal-bar{
-  display:flex;align-items:center;gap:8px;margin-bottom:16px;
-  padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.05);
-}
+/* ════ TERMINAL ════ */
+.terminal-card{background:linear-gradient(145deg,rgba(0,0,0,.6),rgba(0,0,0,.4));border-color:rgba(255,255,255,.07);font-family:'Geist Mono',monospace;}
+.terminal-bar{display:flex;align-items:center;gap:8px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.05);}
 .t-dot{width:10px;height:10px;border-radius:50%;}
-.t-dot-r{background:#ff5f57;}
-.t-dot-y{background:#ffbd2e;}
-.t-dot-g{background:#28c840;}
+.t-dot-r{background:#ff5f57;}.t-dot-y{background:#ffbd2e;}.t-dot-g{background:#28c840;}
 .terminal-title{font-size:.7rem;color:var(--chalk3);margin-left:auto;margin-right:auto;letter-spacing:.06em;}
 .terminal-body{font-size:.77rem;line-height:1.9;min-height:220px;}
 .t-line{display:flex;gap:0;flex-wrap:wrap;}
-.t-prompt{color:var(--purple2);}
-.t-cmd{color:#fff;}
-.t-out{color:var(--chalk2);padding-left:0;}
+.t-prompt{color:var(--purple2);}.t-cmd{color:#fff;}.t-out{color:var(--chalk2);}
 .t-comment{color:rgba(255,255,255,.2);}
-.t-green{color:#4ade80;}
-.t-yellow{color:#fbbf24;}
-.t-blue{color:#93c5fd;}
-.t-purple{color:var(--purple2);}
-.t-red{color:#f87171;}
-.cursor{
-  display:inline-block;width:7px;height:14px;background:var(--purple2);
-  vertical-align:middle;margin-left:2px;border-radius:1px;
-  animation:blink-cursor .85s step-end infinite;
-}
+.t-green{color:#4ade80;}.t-yellow{color:#fbbf24;}.t-blue{color:#93c5fd;}.t-purple{color:var(--purple2);}.t-red{color:#f87171;}
+.cursor{display:inline-block;width:7px;height:14px;background:var(--purple2);vertical-align:middle;margin-left:2px;border-radius:1px;animation:blink-cursor .85s step-end infinite;}
 @keyframes blink-cursor{0%,100%{opacity:1}50%{opacity:0}}
-.terminal-input-row{
-  display:flex;align-items:center;gap:6px;margin-top:8px;
-  border-top:1px solid rgba(255,255,255,.04);padding-top:10px;
-}
-.terminal-input{
-  flex:1;background:none;border:none;outline:none;
-  font-family:'Geist Mono',monospace;font-size:.77rem;color:#fff;caret-color:var(--purple2);
-}
+.terminal-input-row{display:flex;align-items:center;gap:6px;margin-top:8px;border-top:1px solid rgba(255,255,255,.04);padding-top:10px;}
+.terminal-input{flex:1;background:none;border:none;outline:none;font-family:'Geist Mono',monospace;font-size:.77rem;color:#fff;caret-color:var(--purple2);}
 
-/* ══════════════════════════
-   DISCORD BADGE CARD
-══════════════════════════ */
-.discord-card{
-  background:linear-gradient(145deg,rgba(88,101,242,.07),rgba(0,0,0,.02));
-  border-color:rgba(88,101,242,.18);
-}
-.discord-card:hover{border-color:rgba(88,101,242,.3);}
-.discord-profile{display:flex;align-items:center;gap:14px;}
-.discord-av{width:52px;height:52px;border-radius:50%;border:2px solid rgba(88,101,242,.3);}
-.discord-info{flex:1;}
-.discord-name{font-size:1rem;font-weight:700;color:#fff;}
-.discord-tag{font-size:.75rem;color:var(--chalk3);}
-.discord-badges{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;}
-.badge{
-  display:inline-flex;align-items:center;gap:4px;
-  font-size:.62rem;font-weight:700;letter-spacing:.04em;padding:3px 9px;border-radius:99px;
-}
-.badge-joined{background:rgba(88,101,242,.1);color:#93c5fd;border:1px solid rgba(88,101,242,.2);}
-.badge-age{background:rgba(34,197,94,.08);color:#4ade80;border:1px solid rgba(34,197,94,.15);}
-.badge-dev{background:rgba(124,90,244,.1);color:var(--purple2);border:1px solid rgba(124,90,244,.2);}
-
-/* ══════════════════════════
-   FOOTER
-══════════════════════════ */
-.foot{
-  text-align:center;padding:40px 0 20px;
-  font-size:.72rem;color:var(--chalk3);
-  border-top:1px solid var(--border);
-  margin-top:40px;
-}
+/* ════ FOOTER ════ */
+.foot{text-align:center;padding:40px 0 20px;font-size:.72rem;color:var(--chalk3);border-top:1px solid var(--border);margin-top:40px;}
 .foot a{color:var(--purple2);text-decoration:none;}
 .foot a:hover{text-decoration:underline;}
 
-/* ══════════════════════════
-   ANIM - REVEAL
-══════════════════════════ */
+/* ════ REVEAL ════ */
 .rv{opacity:0;transform:translateY(18px);transition:opacity .65s cubic-bezier(.23,1,.32,1),transform .65s cubic-bezier(.23,1,.32,1);}
 .rv.on{opacity:1;transform:none;}
 
-/* ══════════════════════════
-   SCROLLBAR
-══════════════════════════ */
+/* ════ SCROLLBAR ════ */
 ::-webkit-scrollbar{width:5px;}
 ::-webkit-scrollbar-track{background:var(--bg);}
 ::-webkit-scrollbar-thumb{background:rgba(124,90,244,.3);border-radius:99px;}
 ::-webkit-scrollbar-thumb:hover{background:rgba(124,90,244,.5);}
 
-/* ══════════════════════════
-   RESPONSIVE
-══════════════════════════ */
-@media(max-width:500px){
-  .about-grid{grid-template-columns:1fr 1fr;}
-  .project-inner{flex-direction:row;}
-}
+@media(max-width:500px){.about-grid{grid-template-columns:1fr 1fr;}.project-inner{flex-direction:row;}}
 </style>
 </head>
 <body>
 
-<!-- Stars canvas -->
 <canvas id="stars"></canvas>
 
 <div class="wrap">
 
-  <!-- ── HERO ── -->
+  <!-- HERO -->
   <div class="hero rv" style="transition-delay:.05s">
     <div class="avatar-wrap">
       <div class="avatar-spin-ring"></div>
       <div class="avatar-spin-ring2"></div>
-      <img id="av" class="avatar-img" src="https://cdn.discordapp.com/avatars/991663665373327420/a_52296c00d5a49141075727195822365a.gif" alt="fenruko">
+      <img id="av" class="avatar-img" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="fenruko">
       <div class="status-dot offline" id="sdot"></div>
     </div>
     <div class="hero-name">fenruko</div>
-    <div class="hero-handle">@fenruko · 991663665373327420</div>
+    <div class="hero-handle">@fenruko · 834869554798395392</div>
     <div class="hero-status-text" id="hero-status">
       <span style="opacity:.4">Fetching presence…</span>
     </div>
@@ -465,32 +262,32 @@ body::after{
       <span class="chip">🇪🇬 Egypt</span>
     </div>
     <div class="hero-btns">
-      <a href="https://discord.com/users/991663665373327420" class="glass-btn glass-btn-primary">
+      <a href="https://discord.com/users/834869554798395392" target="_blank" class="glass-btn glass-btn-primary">
         <span class="bi">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994.076-.15.005-.33-.157-.395a13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z"/></svg>
           Discord
         </span>
       </a>
-      <a href="https://rift.baby" class="glass-btn">
-        <span class="bi">
-          <img src="https://media.discordapp.net/attachments/1469631519327912012/1482879054590771402/images.png?ex=69b88e3d&is=69b73cbd&hm=eb276178b439b3f306e200db3f35117141c91972621653ddd3bc3a42f98c3af0&=&format=webp&quality=lossless" style="width:14px;height:14px;border-radius:3px" alt="Rift">
-          Rift
-        </span>
-      </a>
-      <a href="https://github.com/fenruko" class="glass-btn">
+      <a href="https://github.com/fenruko" target="_blank" class="glass-btn">
         <span class="bi">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
           GitHub
         </span>
       </a>
+      <a href="https://rift.baby" target="_blank" class="glass-btn">
+        <span class="bi">
+          <img src="https://media.discordapp.net/attachments/1469631519327912012/1482879054590771402/images.png?ex=69b88e3d&is=69b73cbd&hm=eb276178b439b3f306e200db3f35117141c91972621653ddd3bc3a42f98c3af0&=&format=webp&quality=lossless" style="width:14px;height:14px;border-radius:3px" alt="Rift">
+          Rift
+        </span>
+      </a>
     </div>
   </div>
 
-  <!-- ── MAIN GRID ── -->
+  <!-- GRID -->
   <div class="grid">
 
-    <!-- Spotify -->
-    <div class="card spotify-card span-2 rv" style="transition-delay:.1s" id="spotify-card">
+    <!-- Spotify + Lyrics -->
+    <div class="card spotify-card span-2 rv" style="transition-delay:.1s">
       <div class="card-label">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="#1db954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
         <span class="spotify-label" id="spotify-label-badge">Spotify</span>
@@ -501,6 +298,8 @@ body::after{
           Not listening to Spotify right now
         </div>
       </div>
+      <!-- Lyrics panel lives outside #spotify-content so it persists across progress ticks -->
+      <div id="lyrics-panel" class="lyrics-panel"></div>
     </div>
 
     <!-- Activities -->
@@ -536,28 +335,8 @@ body::after{
       </div>
     </div>
 
-    <!-- Discord Badge Card -->
-    <div class="card discord-card rv" style="transition-delay:.22s">
-      <div class="card-label">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994.076-.15.005-.33-.157-.395a13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z"/></svg>
-        Discord
-      </div>
-      <div class="discord-profile">
-        <img id="disc-av" class="discord-av" src="https://cdn.discordapp.com/avatars/991663665373327420/a_52296c00d5a49141075727195822365a.gif" alt="fenruko">
-        <div class="discord-info">
-          <div class="discord-name">fenruko</div>
-          <div class="discord-tag">fenruko · <span id="disc-status-text">Offline</span></div>
-          <div class="discord-badges">
-            <span class="badge badge-joined">📅 2021</span>
-            <span class="badge badge-age">⚡ 16</span>
-            <span class="badge badge-dev">🤖 Bot Dev</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Rift Project Card -->
-    <div class="card project-card span-2 rv" style="transition-delay:.25s">
+    <!-- Rift -->
+    <div class="card project-card rv" style="transition-delay:.25s">
       <div class="project-glow"></div>
       <div class="card-label">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
@@ -571,7 +350,7 @@ body::after{
         </div>
       </div>
       <p class="project-desc">
-        A full-featured Discord bot with Hi-Fi music streaming, server architecture tools, moderation, global economy, social & levels, and deep utility commands. Built in Python with discord.py + wavelink/Lavalink. Free, forever.
+        A full-featured Discord bot with Hi-Fi music streaming, server architecture tools, moderation, global economy, social &amp; levels, and deep utility commands. Built in Python with discord.py + wavelink/Lavalink. Free, forever.
       </p>
       <div class="project-tags">
         <span class="project-tag-badge">Python</span>
@@ -582,21 +361,12 @@ body::after{
         <span class="project-tag-badge">Economy</span>
         <span class="project-tag-badge">Moderation</span>
       </div>
-      <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap;">
-        <a href="https://rift.baby" class="glass-btn glass-btn-primary glass-btn-sm">
+      <div style="margin-top:16px;">
+        <a href="https://rift.baby" target="_blank" class="glass-btn glass-btn-primary glass-btn-sm">
           <span class="bi">
             <img src="https://media.discordapp.net/attachments/1469631519327912012/1482879054590771402/images.png?ex=69b88e3d&is=69b73cbd&hm=eb276178b439b3f306e200db3f35117141c91972621653ddd3bc3a42f98c3af0&=&format=webp&quality=lossless" style="width:12px;height:12px;border-radius:3px" alt="">
             Visit rift.baby
           </span>
-        </a>
-        <a href="https://discord.com/oauth2/authorize?client_id=1329184069426348052&permissions=5076723787231222&integration_type=0&scope=bot" class="glass-btn glass-btn-sm">
-          <span class="bi">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994.076-.15.005-.33-.157-.395a13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z"/></svg>
-            Add to Server
-          </span>
-        </a>
-        <a href="https://docs.rift.baby" class="glass-btn glass-btn-sm">
-          <span class="bi">📖 Docs</span>
         </a>
       </div>
     </div>
@@ -616,418 +386,320 @@ body::after{
       </div>
     </div>
 
-    <!-- Links -->
-    <div class="card rv" style="transition-delay:.32s">
-      <div class="card-label">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-        Links
-      </div>
-      <div class="links-list">
-        <a href="https://rift.baby" class="link-item">
-          <div class="link-icon"><img src="https://media.discordapp.net/attachments/1469631519327912012/1482879054590771402/images.png?ex=69b88e3d&is=69b73cbd&hm=eb276178b439b3f306e200db3f35117141c91972621653ddd3bc3a42f98c3af0&=&format=webp&quality=lossless" style="width:22px;height:22px;border-radius:5px" alt=""></div>
-          <span class="link-label">rift.baby</span>
-          <span class="link-arrow">↗</span>
-        </a>
-        <a href="https://discord.com/users/991663665373327420" class="link-item">
-          <div class="link-icon" style="background:rgba(88,101,242,.15)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="#5865f2"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994.076-.15.005-.33-.157-.395a13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z"/></svg>
-          </div>
-          <span class="link-label">Discord Profile</span>
-          <span class="link-arrow">↗</span>
-        </a>
-        <a href="https://discord.gg/fe46sJY8KF" class="link-item">
-          <div class="link-icon" style="background:rgba(88,101,242,.08)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="#7289da"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994.076-.15.005-.33-.157-.395a13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z"/></svg>
-          </div>
-          <span class="link-label">Rift Support Server</span>
-          <span class="link-arrow">↗</span>
-        </a>
-        <a href="https://top.gg/bot/1329184069426348052" class="link-item">
-          <div class="link-icon" style="background:rgba(255,79,109,.08)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="#ff4f6d"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-          </div>
-          <span class="link-label">Top.gg</span>
-          <span class="link-arrow">↗</span>
-        </a>
-        <a href="https://docs.rift.baby" class="link-item">
-          <div class="link-icon" style="background:rgba(124,90,244,.1)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          </div>
-          <span class="link-label">Rift Docs</span>
-          <span class="link-arrow">↗</span>
-        </a>
-      </div>
-    </div>
-
-    <!-- Tech Stack -->
-    <div class="card rv" style="transition-delay:.34s">
-      <div class="card-label">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>
-        Stack
-      </div>
-      <div style="display:flex;flex-direction:column;gap:7px;">
-        <div class="activity-item" style="padding:9px 12px;">
-          <div class="activity-icon-placeholder" style="width:36px;height:36px;font-size:.9rem;background:rgba(53,114,239,.08);border-color:rgba(53,114,239,.15)">🐍</div>
-          <div class="activity-info"><div class="activity-name" style="font-size:.83rem">Python</div><div class="activity-state">Primary language</div></div>
-        </div>
-        <div class="activity-item" style="padding:9px 12px;">
-          <div class="activity-icon-placeholder" style="width:36px;height:36px;font-size:.9rem;background:rgba(88,101,242,.08);border-color:rgba(88,101,242,.15)">🤖</div>
-          <div class="activity-info"><div class="activity-name" style="font-size:.83rem">discord.py</div><div class="activity-state">Bot framework</div></div>
-        </div>
-        <div class="activity-item" style="padding:9px 12px;">
-          <div class="activity-icon-placeholder" style="width:36px;height:36px;font-size:.9rem;background:rgba(29,185,84,.08);border-color:rgba(29,185,84,.15)">🎵</div>
-          <div class="activity-info"><div class="activity-name" style="font-size:.83rem">wavelink / Lavalink</div><div class="activity-state">Music streaming</div></div>
-        </div>
-        <div class="activity-item" style="padding:9px 12px;">
-          <div class="activity-icon-placeholder" style="width:36px;height:36px;font-size:.9rem;background:rgba(255,255,255,.04)">🛢️</div>
-          <div class="activity-info"><div class="activity-name" style="font-size:.83rem">MongoDB · JSON</div><div class="activity-state">Data persistence</div></div>
-        </div>
-      </div>
-    </div>
-
   </div><!-- end grid -->
 
   <footer class="foot">
-    <div>made by <a href="https://discord.com/users/991663665373327420">fenruko</a> · powered by <a href="https://api.lanyard.rest" target="_blank">lanyard</a> · <a href="https://rift.baby">rift.baby</a></div>
+    <div>made by <a href="https://discord.com/users/834869554798395392" target="_blank">fenruko</a> · powered by <a href="https://lanyard.rest" target="_blank">lanyard</a> · <a href="https://rift.baby" target="_blank">rift.baby</a></div>
     <div style="margin-top:6px;opacity:.5">live data updates every 15s</div>
   </footer>
 
-</div><!-- end wrap -->
+</div>
 
 <script>
-/* ════════════════════════════
-   STARS — fast falling
-════════════════════════════ */
+/* ════ STARS ════ */
 (function(){
-  const c=document.getElementById('stars');
-  const ctx=c.getContext('2d');
+  const c=document.getElementById('stars'),ctx=c.getContext('2d');
   let W,H,stars=[];
   function resize(){W=c.width=innerWidth;H=c.height=innerHeight;}
-  function mkStar(){
-    return{
-      x:Math.random()*W,
-      y:Math.random()*H,
-      r:Math.random()*.9+.15,
-      speed:Math.random()*5+3,   /* fast downward */
-      opacity:Math.random()*.55+.08,
-      trail:Math.random()>.6,    /* some stars leave a little trail */
-    };
-  }
-  function init(){resize();stars=Array.from({length:280},mkStar);}
+  function mk(){return{x:Math.random()*W,y:Math.random()*H,r:Math.random()*.9+.15,speed:Math.random()*5+3,opacity:Math.random()*.55+.08,trail:Math.random()>.6};}
+  function init(){resize();stars=Array.from({length:280},mk);}
   function draw(){
     ctx.clearRect(0,0,W,H);
     for(const s of stars){
-      s.y+=s.speed;
-      if(s.y>H+6){s.y=-6;s.x=Math.random()*W;}
-      /* trail */
+      s.y+=s.speed;if(s.y>H+6){s.y=-6;s.x=Math.random()*W;}
       if(s.trail){
         const g=ctx.createLinearGradient(s.x,s.y-s.speed*2.5,s.x,s.y);
-        g.addColorStop(0,'rgba(255,255,255,0)');
-        g.addColorStop(1,`rgba(255,255,255,${s.opacity*.6})`);
+        g.addColorStop(0,'rgba(255,255,255,0)');g.addColorStop(1,`rgba(255,255,255,${s.opacity*.6})`);
         ctx.beginPath();ctx.moveTo(s.x,s.y-s.speed*2.5);ctx.lineTo(s.x,s.y);
         ctx.strokeStyle=g;ctx.lineWidth=s.r;ctx.stroke();
       }
-      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
-      ctx.fillStyle=`rgba(255,255,255,${s.opacity})`;ctx.fill();
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle=`rgba(255,255,255,${s.opacity})`;ctx.fill();
     }
     requestAnimationFrame(draw);
   }
-  window.addEventListener('resize',resize);
-  init();draw();
+  window.addEventListener('resize',resize);init();draw();
 })();
 
-/* ════════════════════════════
-   REVEAL ON SCROLL
-════════════════════════════ */
-function initReveal(){
-  document.querySelectorAll('.rv').forEach(el=>{
-    if(el.getBoundingClientRect().top<innerHeight*.95){el.classList.add('on');return;}
-    const obs=new IntersectionObserver(([e])=>{if(e.isIntersecting){el.classList.add('on');obs.disconnect();}},{threshold:.08});
-    obs.observe(el);
-  });
-}
-initReveal();
+/* ════ REVEAL ════ */
+document.querySelectorAll('.rv').forEach(el=>{
+  if(el.getBoundingClientRect().top<innerHeight*.95){el.classList.add('on');return;}
+  const obs=new IntersectionObserver(([e])=>{if(e.isIntersecting){el.classList.add('on');obs.disconnect();}},{threshold:.08});
+  obs.observe(el);
+});
 
-/* ════════════════════════════
-   LANYARD — real-time presence
-════════════════════════════ */
-const LANYARD_ID='991663665373327420';
-let spotifyInterval=null;
-let spotifyStart=0,spotifyEnd=0;
-
-function getActivityIconUrl(act){
-  if(!act.assets)return null;
-  const li=act.assets.large_image;
-  if(!li)return null;
-  if(li.startsWith('mp:')){return'https://media.discordapp.net/'+li.slice(3);}
-  if(li.startsWith('spotify:')){return'https://i.scdn.co/image/'+li.slice(8);}
-  if(act.application_id){return`https://cdn.discordapp.com/app-assets/${act.application_id}/${li}.png?size=128`;}
-  return null;
-}
-
-function getSmallIconUrl(act){
-  if(!act.assets||!act.assets.small_image)return null;
-  const si=act.assets.small_image;
-  if(si.startsWith('mp:')){return'https://media.discordapp.net/'+si.slice(3);}
-  if(act.application_id){return`https://cdn.discordapp.com/app-assets/${act.application_id}/${si}.png?size=64`;}
-  return null;
-}
-
+/* ════ HELPERS ════ */
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function fmtTime(ms){const s=Math.floor(ms/1000);return`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;}
 function fmtElapsed(ts){
-  if(!ts)return'';
-  const sec=Math.floor((Date.now()-ts)/1000);
+  if(!ts)return'';const sec=Math.floor((Date.now()-ts)/1000);
   const m=Math.floor(sec/60),s=sec%60;
   return m>60?`${Math.floor(m/60)}h ${m%60}m`:`${m}:${String(s).padStart(2,'0')}`;
 }
-
-function fmtTime(ms){
-  const s=Math.floor(ms/1000);
-  return`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
+function actTypeName(t){return['Playing','Streaming','Listening to','Watching','','Competing in'][t]||'';}
+function getIconUrl(act){
+  if(!act.assets)return null;const li=act.assets.large_image;if(!li)return null;
+  if(li.startsWith('mp:'))return'https://media.discordapp.net/'+li.slice(3);
+  if(li.startsWith('spotify:'))return'https://i.scdn.co/image/'+li.slice(8);
+  if(act.application_id)return`https://cdn.discordapp.com/app-assets/${act.application_id}/${li}.png?size=128`;
+  return null;
 }
 
-function actTypeName(type){
-  return['Playing','Streaming','Listening to','Watching','','Competing in'][type]||'';
+/* ════ LANYARD — ID: 834869554798395392 ════ */
+const LANYARD_ID='834869554798395392';
+let spStart=0,spEnd=0,spInterval=null;
+
+/* ════ LYRICS ENGINE ════ */
+let lyrLines=null;      // [{time:sec, text:str}]
+let lyrKey=null;        // "artist||title" — skip re-fetch for same track
+let lyrRaf=null;
+
+function parseLRC(raw){
+  if(!raw)return null;
+  const out=[];
+  for(const line of raw.split('\n')){
+    const m=line.match(/^\[(\d{2}):(\d{2}[.,]\d+)\](.*)/);
+    if(!m)continue;
+    const t=parseInt(m[1])*60+parseFloat(m[2].replace(',','.'));
+    const txt=m[3].trim();
+    out.push({time:t,text:txt});
+  }
+  return out.length?out:null;
 }
 
+function hideLyrics(){
+  const p=document.getElementById('lyrics-panel');
+  if(p){p.classList.remove('visible');p.innerHTML='';}
+  if(lyrRaf){cancelAnimationFrame(lyrRaf);lyrRaf=null;}
+}
+
+async function fetchLyrics(artist,title,album,durMs){
+  const key=`${artist}||${title}`;
+  if(lyrKey===key)return;
+  lyrKey=key;lyrLines=null;hideLyrics();
+  try{
+    const cleanArtist=artist.split(';')[0].split(',')[0].trim();
+    const dur=Math.round(durMs/1000);
+    const url=`https://lrclib.net/api/get?artist_name=${encodeURIComponent(cleanArtist)}&track_name=${encodeURIComponent(title)}&album_name=${encodeURIComponent(album)}&duration=${dur}`;
+    const r=await fetch(url);if(!r.ok)return;
+    const j=await r.json();
+    if(!j.syncedLyrics){
+      if(j.plainLyrics){
+        const p=document.getElementById('lyrics-panel');
+        if(p){p.innerHTML='<div class="lyrics-no-sync">lyrics available but not time-synced</div>';p.classList.add('visible');}
+      }
+      return;
+    }
+    lyrLines=parseLRC(j.syncedLyrics);
+    if(lyrLines){
+      if(lyrRaf)cancelAnimationFrame(lyrRaf);
+      (function frame(){renderLyrics();lyrRaf=requestAnimationFrame(frame);})();
+    }
+  }catch(e){console.warn('Lyrics fetch failed',e);}
+}
+
+/* track last rendered state to avoid unnecessary DOM mutations */
+let _lastLyrHtml='';
+
+function renderLyrics(){
+  if(!lyrLines)return;
+  const panel=document.getElementById('lyrics-panel');if(!panel)return;
+  const elapsed=(Date.now()-spStart)/1000;
+
+  // find current line
+  let ci=0;
+  for(let i=0;i<lyrLines.length;i++){if(lyrLines[i].time<=elapsed)ci=i;else break;}
+
+  const prev=ci>0?lyrLines[ci-1]:null;
+  const curr=lyrLines[ci];
+  const next=ci<lyrLines.length-1?lyrLines[ci+1]:null;
+
+  // per-word progress within current line
+  const lStart=curr.time;
+  const lEnd=next?next.time:lStart+6;
+  const lDur=Math.max(lEnd-lStart,0.5);
+  const lProg=Math.min(1,Math.max(0,(elapsed-lStart)/lDur));
+
+  const words=(curr.text||'').split(/\s+/).filter(Boolean);
+  const wHtml=words.map((w,i)=>{
+    const lit=lProg>=(i/words.length);
+    return`<span class="lyric-word${lit?' lit':''}">${esc(w)}</span>`;
+  }).join(' ');
+
+  const html=(prev?`<div class="lyric-line lyric-prev">${esc(prev.text)}</div>`:'<div class="lyric-empty"></div>')
+    +`<div class="lyric-line lyric-curr">${wHtml}</div>`
+    +(next?`<div class="lyric-line lyric-next">${esc(next.text)}</div>`:'<div class="lyric-empty"></div>');
+
+  if(html!==_lastLyrHtml){
+    panel.innerHTML=html;
+    panel.classList.add('visible');
+    _lastLyrHtml=html;
+  }
+}
+
+/* ════ SPOTIFY ════ */
 function renderSpotify(sp){
-  const card=document.getElementById('spotify-content');
+  const content=document.getElementById('spotify-content');
   const lbl=document.getElementById('spotify-label-badge');
   if(!sp){
     lbl.innerHTML='Spotify';
-    card.innerHTML=`<div class="not-playing"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" opacity=".4"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>Not listening to Spotify right now</div>`;
-    if(spotifyInterval){clearInterval(spotifyInterval);spotifyInterval=null;}
+    content.innerHTML=`<div class="not-playing"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" opacity=".4"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>Not listening to Spotify right now</div>`;
+    if(spInterval){clearInterval(spInterval);spInterval=null;}
+    lyrKey=null;hideLyrics();
     return;
   }
   lbl.innerHTML=`<div class="spotify-eq"><span></span><span></span><span></span><span></span></div> Now Playing`;
-  spotifyStart=sp.timestamps?.start||Date.now();
-  spotifyEnd=sp.timestamps?.end||Date.now()+sp.track_id?.length||Date.now()+200000;
-  const duration=spotifyEnd-spotifyStart;
+  spStart=sp.timestamps?.start||Date.now();
+  spEnd=sp.timestamps?.end||Date.now()+200000;
+  const dur=spEnd-spStart;
 
-  card.innerHTML=`
+  content.innerHTML=`
     <div class="spotify-inner">
       <img class="spotify-art" src="${sp.album_art_url||''}" alt="" onerror="this.style.display='none'">
       <div class="spotify-info">
-        <div class="spotify-song">${sp.song}</div>
-        <div class="spotify-artist">${sp.artist.replace(/;/g,', ')}</div>
-        <div class="spotify-album">${sp.album}</div>
+        <div class="spotify-song">${esc(sp.song)}</div>
+        <div class="spotify-artist">${esc(sp.artist.replace(/;/g,', '))}</div>
+        <div class="spotify-album">${esc(sp.album)}</div>
         <div class="spotify-progress"><div class="spotify-bar" id="sp-bar"></div></div>
-        <div class="spotify-times"><span id="sp-cur">0:00</span><span>${fmtTime(duration)}</span></div>
+        <div class="spotify-times"><span id="sp-cur">0:00</span><span>${fmtTime(dur)}</span></div>
       </div>
     </div>`;
 
   function tick(){
-    const now=Date.now();
-    const elapsed=now-spotifyStart;
-    const pct=Math.min(100,(elapsed/duration)*100);
-    const bar=document.getElementById('sp-bar');
-    const cur=document.getElementById('sp-cur');
-    if(bar)bar.style.width=pct+'%';
-    if(cur)cur.textContent=fmtTime(elapsed);
+    const el=Date.now()-spStart,pct=Math.min(100,(el/dur)*100);
+    const bar=document.getElementById('sp-bar'),cur=document.getElementById('sp-cur');
+    if(bar)bar.style.width=pct+'%';if(cur)cur.textContent=fmtTime(el);
   }
   tick();
-  if(spotifyInterval)clearInterval(spotifyInterval);
-  spotifyInterval=setInterval(tick,1000);
+  if(spInterval)clearInterval(spInterval);
+  spInterval=setInterval(tick,1000);
+
+  fetchLyrics(sp.artist,sp.song,sp.album,dur);
 }
 
-const elapsedTimers={};
-
-function renderActivities(activities){
+/* ════ ACTIVITIES ════ */
+const elT={};
+function renderActivities(acts){
   const list=document.getElementById('activities-list');
-  const filtered=activities.filter(a=>a.type!==4); // exclude custom status
+  const filtered=acts.filter(a=>a.type!==4);
   if(!filtered.length){
     list.innerHTML=`<div class="no-activity"><svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" opacity=".4"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" d="M12 8v4m0 4h.01"/></svg>No activity detected</div>`;
     return;
   }
   list.innerHTML=filtered.map((act,i)=>{
-    const iconUrl=getActivityIconUrl(act);
-    const iconHtml=iconUrl
-      ?`<img class="activity-icon" src="${iconUrl}" alt="" onerror="this.outerHTML='<div class=\\'activity-icon-placeholder\\'>🎮</div>'">`
-      :`<div class="activity-icon-placeholder">🎮</div>`;
-    const type=actTypeName(act.type);
-    const detail=act.details||'';
-    const state=act.state||'';
-    const ts=act.timestamps?.start;
-    const timerId=`elapsed-${i}`;
-    if(ts){
-      clearInterval(elapsedTimers[i]);
-      elapsedTimers[i]=setInterval(()=>{
-        const el=document.getElementById(timerId);
-        if(el)el.textContent=fmtElapsed(ts);
-        else clearInterval(elapsedTimers[i]);
-      },1000);
-    }
-    return`<div class="activity-item">
-      ${iconHtml}
-      <div class="activity-info">
-        <div class="activity-type">${type}</div>
-        <div class="activity-name">${act.name}</div>
-        ${detail?`<div class="activity-detail">${detail}</div>`:''}
-        ${state?`<div class="activity-state">${state}</div>`:''}
-        ${ts?`<div class="activity-elapsed" id="${timerId}">${fmtElapsed(ts)}</div>`:''}
-      </div>
-    </div>`;
+    const icon=getIconUrl(act);
+    const iconHtml=icon?`<img class="activity-icon" src="${icon}" alt="" onerror="this.outerHTML='<div class=\\'activity-icon-placeholder\\'>🎮</div>'">`:`<div class="activity-icon-placeholder">🎮</div>`;
+    const ts=act.timestamps?.start,tid=`elapsed-${i}`;
+    if(ts){clearInterval(elT[i]);elT[i]=setInterval(()=>{const e=document.getElementById(tid);if(e)e.textContent=fmtElapsed(ts);else clearInterval(elT[i]);},1000);}
+    return`<div class="activity-item">${iconHtml}<div class="activity-info">
+      <div class="activity-type">${actTypeName(act.type)}</div>
+      <div class="activity-name">${esc(act.name)}</div>
+      ${act.details?`<div class="activity-detail">${esc(act.details)}</div>`:''}
+      ${act.state?`<div class="activity-state">${esc(act.state)}</div>`:''}
+      ${ts?`<div class="activity-elapsed" id="${tid}">${fmtElapsed(ts)}</div>`:''}
+    </div></div>`;
   }).join('');
 }
 
-function applyStatus(status,userData){
-  /* dot */
-  const dot=document.getElementById('sdot');
-  dot.className='status-dot '+status;
-  /* disc status text */
-  const dst=document.getElementById('disc-status-text');
-  if(dst)dst.textContent=status.charAt(0).toUpperCase()+status.slice(1);
-  /* avatar */
-  if(userData){
-    const hash=userData.avatar;
-    const uid=userData.id;
-    if(hash){
-      const ext=hash.startsWith('a_')?'gif':'png';
-      const url=`https://cdn.discordapp.com/avatars/${uid}/${hash}.${ext}?size=128`;
-      document.getElementById('av').src=url;
-      document.getElementById('disc-av').src=url;
-    }
+function applyStatus(status,user){
+  document.getElementById('sdot').className='status-dot '+status;
+  if(user?.avatar){
+    const ext=user.avatar.startsWith('a_')?'gif':'png';
+    const url=`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${ext}?size=128`;
+    const av=document.getElementById('av');if(av)av.src=url;
+    // update favicon to user avatar
+    const fi=document.getElementById('favicon');if(fi)fi.href=url;
   }
 }
 
-function renderCustomStatus(activities){
-  const custom=activities.find(a=>a.type===4);
-  const heroStatus=document.getElementById('hero-status');
+function renderCustomStatus(acts){
+  const custom=acts.find(a=>a.type===4);
+  const el=document.getElementById('hero-status');
   if(custom){
     const emoji=custom.emoji?.name||'';
-    heroStatus.innerHTML=`<span class="emoji">${emoji}</span><span>${custom.state||custom.name||''}</span>`;
-  } else {
-    heroStatus.innerHTML=`<span style="opacity:.3">—</span>`;
+    el.innerHTML=`<span class="emoji">${emoji}</span><span>${esc(custom.state||custom.name||'')}</span>`;
+  }else{
+    el.innerHTML=`<span style="opacity:.3">—</span>`;
   }
 }
 
 async function fetchLanyard(){
   try{
     const r=await fetch(`https://api.lanyard.rest/v1/users/${LANYARD_ID}`);
-    const j=await r.json();
-    if(!j.success)return;
+    const j=await r.json();if(!j.success)return;
     const d=j.data;
     applyStatus(d.discord_status,d.discord_user);
     renderCustomStatus(d.activities||[]);
     renderSpotify(d.listening_to_spotify?d.spotify:null);
     renderActivities(d.activities||[]);
-  }catch(e){console.warn('Lanyard fetch failed',e);}
+  }catch(e){console.warn('Lanyard failed',e);}
 }
 fetchLanyard();
 setInterval(fetchLanyard,15000);
 
-/* ════════════════════════════
-   TERMINAL
-════════════════════════════ */
+/* ════ TERMINAL ════ */
 const termLines=[
   {type:'comment',text:'# welcome to fenruko\'s terminal — type help'},
-  {type:'blank'},
-  {type:'cmd',prompt:'fenruko@dev:~$',text:'whoami'},
+  {type:'blank'},{type:'cmd',prompt:'fenruko@dev:~$',text:'whoami'},
   {type:'out',text:'<span class="t-green">fenruko</span> — discord bot dev, 16, egypt 🇪🇬'},
-  {type:'blank'},
-  {type:'cmd',prompt:'fenruko@dev:~$',text:'cat projects.txt'},
+  {type:'blank'},{type:'cmd',prompt:'fenruko@dev:~$',text:'cat projects.txt'},
   {type:'out',text:'<span class="t-purple">Rift</span>     → <span class="t-blue">rift.baby</span>       discord bot (music, mod, economy)'},
   {type:'out',text:'<span class="t-purple">Archanid</span>  → predecessor to Rift, same codebase roots'},
   {type:'out',text:'<span class="t-purple">Cooldoolies</span> → local AI bot powered by Ollama/phi3'},
-  {type:'blank'},
-  {type:'cmd',prompt:'fenruko@dev:~$',text:'uptime'},
+  {type:'blank'},{type:'cmd',prompt:'fenruko@dev:~$',text:'uptime'},
   {type:'out',text:'coding since <span class="t-yellow">2021</span> — that\'s <span class="t-green">4 years</span> of building cool things'},
-  {type:'blank'},
-  {type:'cmd',prompt:'fenruko@dev:~$',text:'_'},
+  {type:'blank'},{type:'cmd',prompt:'fenruko@dev:~$',text:'_'},
 ];
-
 const termBody=document.getElementById('terminal-body');
-let lineIndex=0,charIndex=0,typing=false;
-
-function renderTerminalLine(line){
-  if(line.type==='blank'){const d=document.createElement('div');d.style.height='4px';termBody.appendChild(d);return;}
-  if(line.type==='comment'){
-    const d=document.createElement('div');d.className='t-line';
-    d.innerHTML=`<span class="t-comment">${line.text}</span>`;termBody.appendChild(d);return;
-  }
-  if(line.type==='out'){
-    const d=document.createElement('div');d.className='t-line';
-    d.innerHTML=`<span class="t-out">${line.text}</span>`;termBody.appendChild(d);return;
-  }
-  if(line.type==='cmd'){
-    const d=document.createElement('div');d.className='t-line';
-    d.innerHTML=`<span class="t-prompt">${line.prompt}&nbsp;</span><span class="t-cmd" id="typing-target-${lineIndex}"></span>`;
-    termBody.appendChild(d);
-  }
+let li=0,ci=0;
+function renderLine(ln){
+  if(ln.type==='blank'){const d=document.createElement('div');d.style.height='4px';termBody.appendChild(d);return;}
+  const d=document.createElement('div');d.className='t-line';
+  if(ln.type==='comment')d.innerHTML=`<span class="t-comment">${ln.text}</span>`;
+  else if(ln.type==='out')d.innerHTML=`<span class="t-out">${ln.text}</span>`;
+  else d.innerHTML=`<span class="t-prompt">${ln.prompt}&nbsp;</span><span class="t-cmd" id="tt-${li}"></span>`;
+  termBody.appendChild(d);
 }
-
 function typeNext(){
-  if(lineIndex>=termLines.length){
-    // final cursor
+  if(li>=termLines.length){
     const d=document.createElement('div');d.className='t-line';
     d.innerHTML=`<span class="t-prompt">fenruko@dev:~$&nbsp;</span><span class="cursor"></span>`;
-    termBody.appendChild(d);
-    return;
+    termBody.appendChild(d);return;
   }
-  const line=termLines[lineIndex];
-  if(line.type!=='cmd'){
-    renderTerminalLine(line);
-    lineIndex++;
-    setTimeout(typeNext,line.type==='blank'?60:40);
-    return;
+  const ln=termLines[li];
+  if(ln.type!=='cmd'){renderLine(ln);li++;setTimeout(typeNext,ln.type==='blank'?60:40);return;}
+  renderLine(ln);const target=document.getElementById(`tt-${li}`);ci=0;
+  function tc(){
+    if(!target||ci>ln.text.length){li++;setTimeout(typeNext,ln.text==='_'?0:120);return;}
+    if(ln.text==='_'){li++;return;}
+    target.textContent=ln.text.slice(0,ci);ci++;setTimeout(tc,Math.random()*40+30);
   }
-  renderTerminalLine(line);
-  const target=document.getElementById(`typing-target-${lineIndex}`);
-  charIndex=0;
-  function typeChar(){
-    if(!target||charIndex>line.text.length){
-      lineIndex++;
-      setTimeout(typeNext,line.text==='_'?0:120);
-      return;
-    }
-    if(line.text==='_'){lineIndex++;return;}
-    target.textContent=line.text.slice(0,charIndex);
-    charIndex++;
-    setTimeout(typeChar,Math.random()*40+30);
-  }
-  typeChar();
-  termBody.scrollTop=termBody.scrollHeight;
+  tc();termBody.scrollTop=termBody.scrollHeight;
 }
-
-/* delay start slightly */
 setTimeout(typeNext,600);
 
-/* terminal input handling */
 const termInput=document.getElementById('terminal-input');
-const termCommands={
-  help:()=>`<span class="t-green">Available commands:</span>\nwhoami, projects, stack, discord, rift, clear, age, joke`,
+const cmds={
+  help:()=>`<span class="t-green">commands:</span> whoami, projects, stack, discord, rift, clear, age, joke`,
   whoami:()=>`fenruko — 16yo discord bot dev from egypt 🇪🇬`,
   age:()=>`<span class="t-yellow">16</span> years old`,
-  discord:()=>`<span class="t-blue">discord.com/users/991663665373327420</span>`,
-  rift:()=>`<span class="t-purple">rift.baby</span> — my main project. discord bot with music, mod, economy &amp; more.`,
+  discord:()=>`<a href="https://discord.com/users/834869554798395392" class="t-blue" target="_blank">discord.com/users/834869554798395392</a>`,
+  rift:()=>`<span class="t-purple">rift.baby</span> — discord bot: music, mod, economy &amp; more.`,
   projects:()=>`<span class="t-purple">Rift</span>, Archanid, Cooldoolies bot, and more…`,
   stack:()=>`Python · discord.py · wavelink · Lavalink · MongoDB · JS`,
   clear:()=>'__clear__',
-  joke:()=>{
-    const jokes=['Why do programmers prefer dark mode? Because light attracts bugs! 🐛','I have a joke about UDP... I don\'t care if you get it.','A SQL query walks into a bar, walks up to two tables and asks... "Can I join you?"'];
-    return jokes[Math.floor(Math.random()*jokes.length)];
-  }
+  joke:()=>['Why do programmers prefer dark mode? Because light attracts bugs! 🐛','I have a joke about UDP... I don\'t care if you get it.','A SQL query walks into a bar and asks... "Can I join you?"'][Math.floor(Math.random()*3)],
 };
-
 termInput.addEventListener('keydown',e=>{
   if(e.key!=='Enter')return;
-  const val=termInput.value.trim().toLowerCase();
-  termInput.value='';
-  if(!val)return;
-
-  /* echo input */
+  const val=termInput.value.trim().toLowerCase();termInput.value='';if(!val)return;
   const row=document.createElement('div');row.className='t-line';
   row.innerHTML=`<span class="t-prompt">fenruko@dev:~$&nbsp;</span><span class="t-cmd">${val}</span>`;
   termBody.appendChild(row);
-
-  const fn=termCommands[val];
+  const fn=cmds[val];
   if(fn){
-    const out=fn();
-    if(out==='__clear__'){termBody.innerHTML='';return;}
-    out.split('\n').forEach(line=>{
-      const d=document.createElement('div');d.className='t-line';
-      d.innerHTML=`<span class="t-out">${line}</span>`;termBody.appendChild(d);
-    });
-  } else {
+    const out=fn();if(out==='__clear__'){termBody.innerHTML='';return;}
+    out.split('\n').forEach(l=>{const d=document.createElement('div');d.className='t-line';d.innerHTML=`<span class="t-out">${l}</span>`;termBody.appendChild(d);});
+  }else{
     const d=document.createElement('div');d.className='t-line';
     d.innerHTML=`<span class="t-red">command not found: ${val} — try 'help'</span>`;termBody.appendChild(d);
   }
