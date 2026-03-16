@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>fenruko — developer</title>
+<title>fenruko</title>
 <link rel="icon" href="https://cdn.discordapp.com/embed/avatars/0.png" id="favicon">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -125,7 +125,9 @@ body::after{
 .spotify-inner{display:flex;gap:14px;align-items:center;}
 .spotify-art{width:64px;height:64px;border-radius:8px;object-fit:cover;flex-shrink:0;box-shadow:0 4px 20px rgba(0,0,0,.5);background:rgba(29,185,84,.08);border:1px solid rgba(29,185,84,.15);}
 .spotify-info{flex:1;min-width:0;}
-.spotify-song{font-size:.95rem;font-weight:700;color:#fff;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.spotify-song{font-size:.95rem;font-weight:700;color:#fff;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;}
+.spotify-song-link{text-decoration:none;color:#fff;transition:color .2s;}
+.spotify-song-link:hover{color:var(--spotify);text-decoration:underline;text-underline-offset:3px;}
 .spotify-artist{font-size:.78rem;color:rgba(29,185,84,.8);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .spotify-album{font-size:.72rem;color:var(--chalk3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .spotify-progress{margin-top:10px;height:3px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden;}
@@ -470,35 +472,46 @@ function hideLyrics(){
   const p=document.getElementById('lyrics-panel');
   if(p){p.classList.remove('visible');p.innerHTML='';}
   if(lyrRaf){cancelAnimationFrame(lyrRaf);lyrRaf=null;}
+  _lastLyrHtml='__init__';
 }
 
 async function fetchLyrics(artist,title,album,durMs){
   const key=`${artist}||${title}`;
   if(lyrKey===key)return;
-  lyrKey=key;lyrLines=null;hideLyrics();
+  lyrKey=key;lyrLines=null;_lastLyrHtml='__init__';
+  if(lyrRaf){cancelAnimationFrame(lyrRaf);lyrRaf=null;}
+  const panel=document.getElementById('lyrics-panel');
+  if(panel){panel.innerHTML='<div class="lyrics-no-sync">searching for lyrics…</div>';panel.classList.add('visible');}
   try{
-    const cleanArtist=artist.split(';')[0].split(',')[0].trim();
+    const ca=artist.split(';')[0].split(',')[0].trim();
     const dur=Math.round(durMs/1000);
-    const url=`https://lrclib.net/api/get?artist_name=${encodeURIComponent(cleanArtist)}&track_name=${encodeURIComponent(title)}&album_name=${encodeURIComponent(album)}&duration=${dur}`;
-    const r=await fetch(url);if(!r.ok)return;
-    const j=await r.json();
-    if(!j.syncedLyrics){
-      if(j.plainLyrics){
-        const p=document.getElementById('lyrics-panel');
-        if(p){p.innerHTML='<div class="lyrics-no-sync">lyrics available but not time-synced</div>';p.classList.add('visible');}
+    // 1) exact match with duration
+    let synced=null,hasPlain=false;
+    const r1=await fetch(`https://lrclib.net/api/get?artist_name=${encodeURIComponent(ca)}&track_name=${encodeURIComponent(title)}&album_name=${encodeURIComponent(album)}&duration=${dur}`);
+    if(r1.ok){const j1=await r1.json();if(j1.syncedLyrics)synced=j1.syncedLyrics;else if(j1.plainLyrics)hasPlain=true;}
+    // 2) search fallback (no duration needed)
+    if(!synced){
+      const r2=await fetch(`https://lrclib.net/api/search?artist_name=${encodeURIComponent(ca)}&track_name=${encodeURIComponent(title)}`);
+      if(r2.ok){
+        const arr=await r2.json();
+        const hit=arr.find(x=>x.syncedLyrics)||arr.find(x=>x.plainLyrics);
+        if(hit?.syncedLyrics)synced=hit.syncedLyrics;else if(hit?.plainLyrics)hasPlain=true;
       }
+    }
+    if(!synced){
+      if(panel){panel.innerHTML=`<div class="lyrics-no-sync">${hasPlain?'lyrics found but not time-synced':'no lyrics found'}</div>`;panel.classList.add('visible');}
       return;
     }
-    lyrLines=parseLRC(j.syncedLyrics);
-    if(lyrLines){
-      if(lyrRaf)cancelAnimationFrame(lyrRaf);
-      (function frame(){renderLyrics();lyrRaf=requestAnimationFrame(frame);})();
-    }
-  }catch(e){console.warn('Lyrics fetch failed',e);}
+    lyrLines=parseLRC(synced);
+    if(lyrLines){(function frame(){renderLyrics();lyrRaf=requestAnimationFrame(frame);})();}
+  }catch(e){
+    console.warn('Lyrics fetch failed',e);
+    if(panel)panel.innerHTML='<div class="lyrics-no-sync">could not load lyrics</div>';
+  }
 }
 
 /* track last rendered state to avoid unnecessary DOM mutations */
-let _lastLyrHtml='';
+let _lastLyrHtml='__init__';
 
 function renderLyrics(){
   if(!lyrLines)return;
@@ -520,8 +533,10 @@ function renderLyrics(){
   const lProg=Math.min(1,Math.max(0,(elapsed-lStart)/lDur));
 
   const words=(curr.text||'').split(/\s+/).filter(Boolean);
+  // instrument each word with a fractional threshold
   const wHtml=words.map((w,i)=>{
-    const lit=lProg>=(i/words.length);
+    const threshold=words.length>1?(i/(words.length-1)):0;
+    const lit=lProg>=threshold;
     return`<span class="lyric-word${lit?' lit':''}">${esc(w)}</span>`;
   }).join(' ');
 
@@ -556,7 +571,7 @@ function renderSpotify(sp){
     <div class="spotify-inner">
       <img class="spotify-art" src="${sp.album_art_url||''}" alt="" onerror="this.style.display='none'">
       <div class="spotify-info">
-        <div class="spotify-song">${esc(sp.song)}</div>
+        <a class="spotify-song spotify-song-link" href="https://open.spotify.com/track/${sp.track_id||''}" target="_blank" rel="noopener">${esc(sp.song)}</a>
         <div class="spotify-artist">${esc(sp.artist.replace(/;/g,', '))}</div>
         <div class="spotify-album">${esc(sp.album)}</div>
         <div class="spotify-progress"><div class="spotify-bar" id="sp-bar"></div></div>
@@ -680,7 +695,7 @@ setTimeout(typeNext,600);
 const termInput=document.getElementById('terminal-input');
 const cmds={
   help:()=>`<span class="t-green">commands:</span> whoami, projects, stack, discord, rift, clear, age, joke`,
-  whoami:()=>`fenruko — 16yo discord bot dev from egypt 🇪🇬`,
+  whoami:()=>`fenruko — 16yo discord bot dev!`,
   age:()=>`<span class="t-yellow">16</span> years old`,
   discord:()=>`<a href="https://discord.com/users/834869554798395392" class="t-blue" target="_blank">discord.com/users/834869554798395392</a>`,
   rift:()=>`<span class="t-purple">rift.baby</span> — discord bot: music, mod, economy &amp; more.`,
