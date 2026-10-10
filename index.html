@@ -3,28 +3,175 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>lia</title>
+  <title>@fenruko</title>
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
+  
   <style>
-    body {
+    * {
+      box-sizing: border-box;
       margin: 0;
-      height: 100vh;
-      background-color: #f58ca9;
+      padding: 0;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #0b111e;
+      font-family: 'Bangers', cursive;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-family: 'Great Vibes', cursive;
     }
+
+    /* Background Canvas */
+    #bgCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    /* Card Container with subtle frosted finish, no harsh glow */
+    .container {
+      position: relative;
+      z-index: 2;
+      padding: 2.5rem 4.5rem;
+      border-radius: 20px;
+      background: rgba(18, 22, 41, 0.65);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+      animation: gentleFloat 5s ease-in-out infinite;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease;
+      text-align: center;
+      user-select: none;
+    }
+
+    .container:hover {
+      transform: translateY(-6px) scale(1.01);
+      border-color: rgba(255, 255, 255, 0.18);
+    }
+
+    /* Clean, non-neon platinum / soft gradient title */
     h1 {
-      font-size: 5rem;
+      font-size: 6.5rem;
+      letter-spacing: 5px;
+      background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 50%, #c4b5fd 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
       margin: 0;
-      font-weight: normal;
+      line-height: 1.05;
+      text-transform: lowercase;
+      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
+    }
+
+    @keyframes gentleFloat {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-8px);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 1.8rem 3rem;
+        margin: 1.5rem;
+      }
+      h1 {
+        font-size: 4rem;
+        letter-spacing: 3px;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>lia</h1>
+
+  <!-- Lightweight Dynamic Matte Canvas Background -->
+  <canvas id="bgCanvas"></canvas>
+
+  <main class="container">
+    <h1>@fenruko</h1>
+  </main>
+
+  <script>
+    const canvas = document.getElementById('bgCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    // Soft organic matte gradient waves (deep cyan to purple)
+    let time = 0;
+
+    function renderBackground() {
+      time += 0.003;
+
+      // Deep base dark cyan/navy
+      const baseGrad = ctx.createLinearGradient(0, 0, width, height);
+      baseGrad.addColorStop(0, '#091522');
+      baseGrad.addColorStop(0.5, '#0d162d');
+      baseGrad.addColorStop(1, '#160d2b');
+      ctx.fillStyle = baseGrad;
+      ctx.fillRect(0, 0, width, height);
+
+      // Matte Fluid Layer 1 - Deep Soft Cyan Wave
+      ctx.beginPath();
+      const x1 = width * 0.3 + Math.sin(time) * 80;
+      const y1 = height * 0.4 + Math.cos(time * 0.8) * 60;
+      const rad1 = Math.max(width, height) * 0.55;
+      const cyanGrad = ctx.createRadialGradient(x1, y1, 0, x1, y1, rad1);
+      cyanGrad.addColorStop(0, 'rgba(14, 116, 144, 0.28)');
+      cyanGrad.addColorStop(0.6, 'rgba(14, 116, 144, 0.08)');
+      cyanGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = cyanGrad;
+      ctx.arc(x1, y1, rad1, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Matte Fluid Layer 2 - Rich Deep Purple Wave
+      ctx.beginPath();
+      const x2 = width * 0.7 + Math.cos(time * 0.7) * 90;
+      const y2 = height * 0.6 + Math.sin(time * 0.9) * 70;
+      const rad2 = Math.max(width, height) * 0.6;
+      const purpleGrad = ctx.createRadialGradient(x2, y2, 0, x2, y2, rad2);
+      purpleGrad.addColorStop(0, 'rgba(109, 40, 217, 0.28)');
+      purpleGrad.addColorStop(0.6, 'rgba(109, 40, 217, 0.08)');
+      purpleGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = purpleGrad;
+      ctx.arc(x2, y2, rad2, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Matte Fluid Layer 3 - Subtle Violet Accent
+      ctx.beginPath();
+      const x3 = width * 0.5 + Math.sin(time * 0.5) * 100;
+      const y3 = height * 0.2 + Math.cos(time * 0.6) * 50;
+      const rad3 = Math.max(width, height) * 0.45;
+      const violetGrad = ctx.createRadialGradient(x3, y3, 0, x3, y3, rad3);
+      violetGrad.addColorStop(0, 'rgba(76, 29, 149, 0.22)');
+      violetGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = violetGrad;
+      ctx.arc(x3, y3, rad3, 0, Math.PI * 2);
+      ctx.fill();
+
+      requestAnimationFrame(renderBackground);
+    }
+
+    window.onload = () => {
+      renderBackground();
+    };
+  </script>
 </body>
 </html>
